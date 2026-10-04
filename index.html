@@ -117,6 +117,15 @@ input:hover,select:hover,textarea:hover{border-color:var(--muted)}
 input[type=file]::file-selector-button{font:700 14px/1 var(--body);border:1.5px solid var(--sea);background:var(--sea-soft);color:var(--sea);border-radius:8px;padding:9px 12px;margin-right:10px;cursor:pointer}
 .actions{position:sticky;bottom:0;z-index:2;padding:18px 0 max(12px,env(safe-area-inset-bottom));background:linear-gradient(to bottom,transparent,var(--bg) 35%)}
 .actions .primary{flex:1;min-height:50px;font-size:16px}
+/* Avance real del formulario: paso visible, datos obligatorios listos y precio de lista, siempre a la vista abajo */
+.actions{background:var(--bg);border-top:1px solid var(--line);padding-top:10px;box-shadow:0 -8px 16px -12px rgb(0 0 0 / .25)}
+.avance{flex-basis:100%;display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--muted)}
+.avance-txt{display:flex;justify-content:space-between;gap:4px 12px;flex-wrap:wrap}
+.avance-txt b{color:var(--ink)}
+.barra{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.barra i{display:block;height:100%;width:0;background:var(--sea);border-radius:3px;transition:width .35s ease}
+@media (prefers-reduced-motion:reduce){.barra i{transition:none}}
+.hero .ver-precios,footer a{display:inline-block;padding:10px 4px}
 #review,#sent,#fail{border-radius:16px}
 .hero .ver-precios{color:#ffd28a;font-weight:700;white-space:nowrap}
 footer a{color:var(--sea);font-weight:700}
@@ -138,7 +147,7 @@ footer a{color:var(--sea);font-weight:700}
   <h1>Tu exposición, lista para <em>defenderla</em></h1>
   <p>Diapositivas hechas para tu tema, con guion para quien expone y las preguntas que puede hacer el profe. Una sola persona llena el formulario por todo el grupo.</p>
   <ul class="incluye"><li>Diapositivas</li><li>Guion para exponer</li><li>Guía de estudio</li></ul>
-  <div class="cta-row"><a class="btn cta" href="#form">Pedir cotización</a><small>Te llega el precio por correo, sin compromiso. <a href="precios.html" class="ver-precios">Ver precios</a></small></div>
+  <div class="cta-row"><a class="btn cta" href="#form">Pedir cotización</a><small>Te respondo por correo en menos de 24 h, sin compromiso. <a href="precios.html" class="ver-precios">Ver precios</a></small></div>
 </header>
 <ol class="pasos" aria-label="Cómo funciona">
   <li><b>Llenas el formulario</b>Unos 5 minutos, una persona por grupo.</li>
@@ -194,7 +203,7 @@ footer a{color:var(--sea);font-weight:700}
     <div class="f"><label for="minutos">Duración de la exposición <span class="opt">(min, opcional)</span></label><input id="minutos" type="number" min="1" max="240" inputmode="numeric"></div>
   </div>
   <div class="row">
-    <div class="f"><label for="fecha">¿Cuándo las necesitas?</label><input id="fecha" type="date" required></div>
+    <div class="f"><label for="fecha">¿Cuándo las necesitas?</label><input id="fecha" type="date" required><p class="hint" id="fechaTip"></p></div>
     <div class="f"><label for="hora">Hora <span class="opt">(opcional)</span></label><input id="hora" type="time"></div>
   </div>
   <div class="f"><span class="lbl" id="contenidoL">El contenido</span>
@@ -253,6 +262,8 @@ footer a{color:var(--sea);font-weight:700}
 </fieldset>
 
 <div class="actions">
+  <div class="avance"><div class="avance-txt"><span id="avPaso">Paso 1 de 7 · <b>Tus datos</b></span><span id="avPrecio"></span></div>
+    <div class="barra" role="progressbar" aria-label="Datos obligatorios listos" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="avBarra"></i></div></div>
   <button type="submit" class="primary">Revisar y enviar</button>
   <button type="button" class="ghost" id="clear">Borrar todo</button>
 </div>
@@ -262,7 +273,7 @@ footer a{color:var(--sea);font-weight:700}
 <section id="sent" hidden aria-live="polite" style="background:var(--paper);border-radius:var(--r);padding:20px 18px;display:flex;flex-direction:column;gap:16px;border-left:4px solid var(--sun)">
   <h2 style="margin:0;font:700 22px/1.2 var(--display)">Encargo recibido</h2>
   <p style="margin:0">Tu código es <span class="code" id="code"></span></p>
-  <p style="margin:0">Te escribo a <strong id="sentTo"></strong> con el precio, el anticipo y la fecha de entrega. Revisa también la carpeta de spam.</p>
+  <p style="margin:0">Te escribo a <strong id="sentTo"></strong> con el precio, el anticipo y la fecha de entrega, en menos de 24 horas. Revisa también la carpeta de spam.</p>
   <div class="actions noprint"><button type="button" id="pdf">Guardar copia en PDF</button><button type="button" class="ghost" id="nuevo">Hacer otro encargo</button></div>
   <details><summary class="noprint">Ver lo que enviaste</summary><pre id="resumen"></pre></details>
   <div id="pago">
@@ -430,10 +441,36 @@ $('#clear').onclick=e=>{
   try{localStorage.removeItem(KEY);}catch(_){}
   form.reset(); $('#fileList').innerHTML=''; members.innerHTML=''; addMember(); toggles(); armed=false; e.target.textContent='Borrar todo'; scrollTo(0,0);
 };
-form.addEventListener('input',()=>{ toggles(); save(); });
-form.addEventListener('change',e=>{ toggles(); save(); const c=e.target.closest('.invalid'); if(c) c.classList.remove('invalid'); if(e.target.type==='radio') e.target.closest('[data-req]')?.querySelectorAll('.invalid').forEach(x=>x.classList.remove('invalid')); });
+const pasos=[...form.querySelectorAll(':scope>fieldset')];
+function avance(){
+  let tot=0, ok=0;
+  form.querySelectorAll('[required]').forEach(e=>{ if(e.id==='web'||e.closest('[hidden]')||(e.offsetParent===null&&e.type!=='checkbox')) return;
+    tot++; if(e.type==='checkbox'?e.checked:(e.value.trim()&&e.checkValidity())) ok++; });
+  $$('[data-req]').forEach(g=>{ tot++; if(radio(g.dataset.req)) ok++; });
+  const pct=tot?Math.round(ok/tot*100):0;
+  $('#avBarra').style.width=pct+'%'; $('.barra').setAttribute('aria-valuenow',pct);
+  const p=precioMin()[1];
+  $('#avPrecio').innerHTML=p?`Lista <b>${cop(p)}</b> · empiezas con <b>${cop(Math.ceil(p/200)*100)}</b>`:`${ok} de ${tot} datos listos`;
+}
+function fechaTip(){
+  const t=$('#fechaTip'), f=val('fecha'); if(!f){ t.textContent=''; return; }
+  const ent=new Date(`${f}T${val('hora')||'23:59'}`), h=(ent-Date.now())/36e5;
+  const fmt=d=>d.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});
+  t.textContent= h<0 ? 'Esa fecha ya pasó.'
+    : h<24 ? 'Es para menos de 24 h: lleva recargo de +50 % sobre la lista.'
+    : h<48 ? 'Es para menos de 48 h: lleva recargo de +30 % sobre la lista.'
+    : h<72 ? 'Faltan menos de 3 días: te confirmo por correo si entra a precio normal.'
+    : `Precio normal si el anticipo llega a más tardar el ${fmt(new Date(ent-3*864e5))}.`;
+}
+const pasoObs=new IntersectionObserver(es=>es.forEach(e=>{ if(!e.isIntersecting) return;
+  const l=e.target.querySelector('legend'); if(!l) return;
+  $('#avPaso').innerHTML=`Paso ${l.querySelector('b').textContent} de ${pasos.length} · <b>${l.textContent.replace(/^\d+/,'').trim()}</b>`;
+}),{rootMargin:'-35% 0px -55% 0px'});
+pasos.forEach(fs=>pasoObs.observe(fs));
+form.addEventListener('input',()=>{ toggles(); save(); avance(); fechaTip(); });
+form.addEventListener('change',e=>{ toggles(); save(); avance(); fechaTip(); const c=e.target.closest('.invalid'); if(c) c.classList.remove('invalid'); if(e.target.type==='radio') e.target.closest('[data-req]')?.querySelectorAll('.invalid').forEach(x=>x.classList.remove('invalid')); });
 try{ const t=new Date(); $('#fecha').min=new Date(t-t.getTimezoneOffset()*6e4).toISOString().slice(0,10); }catch(e){}
-load(); toggles();
+load(); toggles(); avance(); fechaTip();
 })();
 
 </script>

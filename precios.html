@@ -40,7 +40,8 @@ a{color:var(--sea)}
 .bar .marca{font:800 17px/1 var(--display);text-decoration:none;color:var(--ink);white-space:nowrap}
 .bar nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-left:auto}
 .bar nav::-webkit-scrollbar{display:none}
-.bar nav a{white-space:nowrap;text-decoration:none;font-weight:700;font-size:15px;padding:8px 10px;border-radius:8px}
+.bar nav a{white-space:nowrap;text-decoration:none;font-weight:700;font-size:15px;padding:10px 12px;border-radius:8px}
+footer a{display:inline-block;padding:8px 0}
 .bar nav a:hover{background:var(--sea-soft)}
 .bar nav a.cta{background:var(--sea);color:var(--paper)}
 @media (max-width:600px){.bar .marca{display:none}.bar nav{margin-left:0}}
@@ -186,7 +187,9 @@ details p{padding-bottom:16px;color:var(--muted);max-width:70ch}
 .fallo b{font:800 40px/1 var(--display);color:var(--bad);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 .fallo h3{font-size:17px}
 .fallo p{color:var(--muted);font-size:15px}
-.fallo a{font-size:13px;margin-top:auto;padding-top:4px}
+.fallo a{font-size:13px;margin-top:auto;padding:10px 0 6px;display:inline-block}
+.urg-tip{margin:8px 0 0;font-size:14px;color:var(--muted)}
+.urg-tip b{color:var(--ink)}
 .estudios{max-width:80ch;font-size:16px}
 .prueba{display:flex;flex-direction:column;gap:12px}
 .muestras{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -287,7 +290,7 @@ details[open] p{animation:sube .3s ease}
           <label><input type="radio" name="urg" value="1" checked>3 días o más</label>
           <label><input type="radio" name="urg" value="1.3">Menos de 48 h</label>
           <label><input type="radio" name="urg" value="1.5">Menos de 24 h</label>
-        </div></div>
+        </div><p class="urg-tip" id="urgTip"></p></div>
     </div>
     <div class="card recibo" aria-live="polite">
       <h3 id="rNombre">Expo lista</h3>
@@ -372,7 +375,7 @@ details[open] p{animation:sube .3s ease}
     <p class="muted">Nunca pagas todo antes de ver el trabajo.</p></div>
   <ol class="flujo">
     <li><b>Pides</b>Llenas el formulario una sola vez por todo el grupo.</li>
-    <li><b>Te confirmo</b>Te llega por correo el precio, la mitad y la fecha de entrega.</li>
+    <li><b>Te confirmo</b>En menos de 24 h te llega por correo el precio, la mitad y la fecha de entrega.</li>
     <li><b>Pagas la mitad</b>Por Nequi. El trabajo empieza cuando entra.</li>
     <li><b>Ves y pagas el resto</b>Revisas una vista previa; con el saldo te llegan los archivos.</li>
   </ol>
@@ -408,7 +411,7 @@ details[open] p{animation:sube .3s ease}
     <div class="info">
       <ul class="muted">
         <li>Puedes escribir sin poner tu nombre.</li>
-        <li>Si quieres respuesta, deja tu correo. Respondo solo por correo.</li>
+        <li>Si quieres respuesta, deja tu correo. Respondo solo por correo, en menos de 24 horas.</li>
         <li>Si es sobre un pedido, pon el código que te llegó (empieza por ENC-).</li>
         <li>También puedes escribir a <a href="mailto:asesoriaacademica.gj@gmail.com">asesoriaacademica.gj@gmail.com</a>.</li>
       </ul>
@@ -494,17 +497,25 @@ function cotizar(s, n, integ, u) {
 const sel = $('srv');
 for (const [k, d] of Object.entries(SRV)) sel.add(new Option(d.nombre, k));
 let prev = 'expo';
+function urgTip(normal, total, u) {
+  const d = new Date(Date.now() + 3 * 864e5).toLocaleDateString('es-CO', {weekday: 'long', day: 'numeric', month: 'long'});
+  $('urgTip').innerHTML = u > 1 && total > normal
+    ? `Si puedes recibirlo el <b>${d}</b> o después (con el anticipo pagado hoy), queda en <b>${cop(normal)}</b>: ahorras ${cop(total - normal)}.`
+    : `Precio normal si pagas el anticipo hoy y la entrega es el <b>${d}</b> o después.`;
+}
 function calc() {
   const s = sel.value, d = SRV[s];
   if (s !== prev) { $('n').value = d.def; $('nDur').value = d.def; prev = s; }
   $('n').hidden = !!d.dur; $('nDur').hidden = !d.dur;
   const n = d.dur ? +$('nDur').value : Math.min(80, Math.max(1, Math.round(+$('n').value || 1))), integ = Math.min(15, Math.max(1, Math.round(+$('integ').value || 1)));
   const u = +document.querySelector('input[name=urg]:checked').value;
+  if (document.activeElement !== $('n') && !d.dur && $('n').value !== String(n)) $('n').value = n;
+  if (document.activeElement !== $('integ') && $('integ').value !== String(integ)) $('integ').value = integ;
   $('nLab').textContent = d.unidad; $('nLab').htmlFor = d.dur ? 'nDur' : 'n'; $('srvTxt').textContent = d.txt; $('intBox').hidden = !d.grupo;
   const r = cotizar(s, n, integ, u);
   $('rNombre').textContent = d.nombre;
   $('lineas').innerHTML = r.L.map(x => `<div><span>${x[0]}</span><span>${cop(x[1])}</span></div>`).join('');
-  $('total').textContent = cop(r.total); $('ant').textContent = cop(r.ant); $('sal').textContent = cop(r.sal);
+  $('total').textContent = cop(r.total); urgTip(cotizar(s, n, integ, 1).total, r.total, u); $('ant').textContent = cop(r.ant); $('sal').textContent = cop(r.sal);
   $('cabeza').textContent = d.grupo && integ > 1 ? `Entre ${integ} personas sale a unos ${cop(up(r.total / integ, 50))} cada una.` : '';
 }
 document.querySelectorAll('#calcula select, #calcula input').forEach(e => e.addEventListener('input', calc));
