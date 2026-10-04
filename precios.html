@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Precios · Asesoría Académica</title>
+<meta name="description" content="Cuánto cuesta tu exposición, cómo se calcula y dónde dejar una queja o sugerencia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: una sola columna de lectura en celular; en tablet y computador la calculadora se abre en dos columnas y la lista de precios en rejilla. */
+:root{
+  --bg:#eef2f3; --paper:#ffffff; --ink:#13232b; --muted:#566a73; --line:#cdd8dc;
+  --sea:#0d6f74; --sea-deep:#0a4c50; --sea-soft:#dcefef; --sun:#9c5b07; --sun-soft:#fdf0dc; --bad:#b3261e; --bad-soft:#fbe9e7; --ok:#1d7a3e;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",ui-sans-serif,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c1519; --paper:#132027; --ink:#e3ecee; --muted:#93a8b0; --line:#2a3b43;
+  --sea:#4fc1c4; --sea-deep:#0a3438; --sea-soft:#163338; --sun:#f0ae4b; --sun-soft:#3a2a12; --bad:#ff8a80; --bad-soft:#3a1c1a; --ok:#5fd08a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1519; --paper:#132027; --ink:#e3ecee; --muted:#93a8b0; --line:#2a3b43;
+  --sea:#4fc1c4; --sea-deep:#0a3438; --sea-soft:#163338; --sun:#f0ae4b; --sun-soft:#3a2a12; --bad:#ff8a80; --bad-soft:#3a1c1a; --ok:#5fd08a; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 var(--body);-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+h2{font-weight:800;font-size:clamp(24px,4vw,30px);line-height:1.15;letter-spacing:-.01em}
+h3{font-weight:600;font-size:19px;line-height:1.25}
+p{margin:0}
+a{color:var(--sea)}
+.muted{color:var(--muted)}
+.wrap{max-width:1000px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left))}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+
+/* Barra superior fija con el menú: en celular se desliza de lado */
+.bar{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:12px;min-height:56px}
+.bar .marca{font:800 17px/1 var(--display);text-decoration:none;color:var(--ink);white-space:nowrap}
+.bar nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-left:auto}
+.bar nav::-webkit-scrollbar{display:none}
+.bar nav a{white-space:nowrap;text-decoration:none;font-weight:700;font-size:15px;padding:8px 10px;border-radius:8px}
+.bar nav a:hover{background:var(--sea-soft)}
+.bar nav a.cta{background:var(--sea);color:var(--paper)}
+@media (max-width:600px){.bar .marca{display:none}.bar nav{margin-left:0}}
+
+.hero{background:linear-gradient(160deg,#0d6f74,#0a4c50);color:#f2fbfb;padding-block:40px 44px}
+.hero .wrap{display:flex;flex-direction:column;gap:14px}
+.hero .tag{font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:#ffd28a}
+.hero h1{font-weight:800;font-size:clamp(34px,7vw,56px);line-height:1;letter-spacing:-.025em;max-width:16ch}
+.hero h1 em{font-style:normal;color:#ffd28a}
+.hero p{max-width:58ch;color:#cfe7e7}
+.claves{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:720px){.claves{grid-template-columns:1fr}}
+.claves li{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:12px 14px;font-size:15px;color:#cfe7e7}
+.claves b{display:block;color:#fff;font-size:17px}
+
+main{display:flex;flex-direction:column;gap:56px;padding-block:44px 72px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.cab{display:flex;flex-direction:column;gap:6px;max-width:64ch}
+.paso-n{font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--sun)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px}
+
+/* La ecuación del precio */
+.ecuacion{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px}
+.ecuacion .t{flex:1 1 180px;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:4px}
+.ecuacion .t b{font:800 28px/1.1 var(--display);color:var(--sea);font-variant-numeric:tabular-nums}
+.ecuacion .t span{font-size:15px;color:var(--muted)}
+.ecuacion .op{align-self:center;font:800 30px/1 var(--display);color:var(--muted);padding-inline:2px}
+.ecuacion .t.res{background:var(--sea);border-color:var(--sea)}
+.ecuacion .t.res b,.ecuacion .t.res span,.ecuacion .t.res small{color:var(--paper)}
+@media (max-width:600px){.ecuacion{flex-direction:column}.ecuacion .t{flex:none}.ecuacion .op{align-self:flex-start;padding-left:16px}}
+
+.ejemplo{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media (max-width:760px){.ejemplo{grid-template-columns:1fr}}
+.pasos{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;counter-reset:p}
+.pasos li{counter-increment:p;display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start}
+.pasos li::before{content:counter(p);width:34px;height:34px;border-radius:50%;background:var(--sea-soft);color:var(--sea);font:800 16px/34px var(--display);text-align:center}
+.pasos b{font-variant-numeric:tabular-nums}
+.nota{background:var(--sun-soft);border-radius:12px;padding:14px 16px;font-size:16px}
+
+/* Calculadora */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media (max-width:760px){.calc{grid-template-columns:1fr}}
+.campos{display:flex;flex-direction:column;gap:16px}
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:400px){.dos{grid-template-columns:1fr}}
+label,.lbl{font-weight:700;font-size:15px}
+select,input,textarea{font:inherit;font-size:17px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;width:100%;min-width:0}
+textarea{min-height:140px;resize:vertical}
+.hint{font-size:14px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips label{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:999px;padding:9px 14px;font-weight:400;cursor:pointer;min-height:44px}
+.chips label:has(input:checked){border-color:var(--sea);background:var(--sea-soft);font-weight:700}
+.chips input{accent-color:var(--sea);width:17px;height:17px;margin:0}
+.recibo{display:flex;flex-direction:column;gap:12px;position:sticky;top:72px}
+@media (max-width:760px){.recibo{position:static}}
+.lineas{display:flex;flex-direction:column;gap:6px}
+.lineas div{display:flex;justify-content:space-between;gap:12px}
+.lineas span:last-child,.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.corte{border:0;border-top:1.5px dashed var(--line);margin:4px 0}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.total b{font:800 36px/1 var(--display);color:var(--sea);font-variant-numeric:tabular-nums}
+.mitades{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mitades div{background:var(--bg);border-radius:10px;padding:10px 12px}
+.mitades small{display:block;color:var(--muted);font-size:13px}
+.mitades b{font:700 21px/1.2 var(--display);font-variant-numeric:tabular-nums}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 16px/1 var(--body);border-radius:10px;padding:14px 18px;min-height:48px;cursor:pointer;border:1.5px solid var(--sea);background:var(--sea);color:var(--paper);text-decoration:none}
+.btn.sec{background:transparent;color:var(--sea)}
+.btn[disabled]{opacity:.6;cursor:progress}
+
+/* Lista de precios en tarjetas: se lee igual en celular que en computador */
+.lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.srv{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px}
+.srv-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.srv .formula{font-size:15px;background:var(--bg);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.srv .formula span{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ejs{margin:0;display:flex;flex-direction:column}
+.ejs div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.ejs div:last-child{border-bottom:0}
+.ejs dt{color:var(--muted);font-size:15px}
+.ejs dd{margin:0;font:800 20px/1 var(--display);color:var(--sea);font-variant-numeric:tabular-nums}
+.btn.mini{min-height:42px;padding:10px 14px;font-size:15px;margin-top:auto}
+.srv.top{border-color:var(--sea);box-shadow:0 0 0 1px var(--sea)}
+.srv .sello{flex:none;font-size:12px;font-weight:700;background:var(--sea);color:var(--paper);border-radius:999px;padding:3px 10px}
+
+.urg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:600px){.urg{grid-template-columns:1fr}}
+.urg div{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.urg b{display:block;font:800 22px/1.2 var(--display)}
+
+.flujo{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;counter-reset:q}
+@media (max-width:860px){.flujo{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.flujo{grid-template-columns:1fr}}
+.flujo li{counter-increment:q;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:15px;color:var(--muted)}
+.flujo li::before{content:counter(q);font:800 22px/1 var(--display);color:var(--sea);display:block;margin-bottom:6px}
+.flujo b{display:block;color:var(--ink);font-size:17px}
+
+.incluye{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:640px){.incluye{grid-template-columns:1fr}}
+.incluye ul{margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+
+details{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:0 16px}
+details+details{margin-top:10px}
+summary{cursor:pointer;font-weight:700;padding:15px 0;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:800 22px/1 var(--display);color:var(--sea)}
+details[open] summary::after{content:"−"}
+details p{padding-bottom:16px;color:var(--muted);max-width:70ch}
+
+/* Escríbenos */
+.buzon{display:grid;grid-template-columns:1fr 1.3fr;gap:24px;align-items:start}
+@media (max-width:820px){.buzon{grid-template-columns:1fr}}
+.buzon .info{display:flex;flex-direction:column;gap:12px}
+.buzon .info ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.trampa{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.cuenta{font-size:13px;color:var(--muted);text-align:right}
+.estado{border-radius:12px;padding:14px 16px}
+.estado.ok{background:var(--sea-soft)}
+.estado.mal{background:var(--bad-soft)}
+.estado b{font-family:var(--display)}
+
+.metodos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;counter-reset:m}
+@media (max-width:860px){.metodos{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.metodos{grid-template-columns:1fr}}
+.metodos li{counter-increment:m;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;color:var(--muted);font-size:15px;display:flex;flex-direction:column;gap:4px}
+.metodos li::before{content:counter(m,decimal-leading-zero);font:800 14px/1 var(--display);color:var(--sun);letter-spacing:.05em}
+.metodos b{color:var(--ink);font-size:17px}
+.antes{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:640px){.antes{grid-template-columns:1fr}}
+.antes .card{display:flex;flex-direction:column;gap:10px}
+.antes .card p:not(.hint){font-size:18px;line-height:1.5}
+.eti{align-self:flex-start;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 10px}
+.eti.mal{background:var(--bad-soft);color:var(--bad)}
+.eti.bien{background:var(--sea-soft);color:var(--sea)}
+.relleno{display:flex;flex-direction:column;gap:12px}
+.r-vista{background:var(--bg);border-radius:10px;padding:12px 14px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.r-vista mark{background:var(--sun-soft);color:var(--ink);border-bottom:2px solid var(--sun);border-radius:3px;padding:0 2px;cursor:help}
+#rCuenta{font-weight:700}
+.fallos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:860px){.fallos{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.fallos{grid-template-columns:1fr}}
+.fallo{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.fallo b{font:800 40px/1 var(--display);color:var(--bad);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.fallo h3{font-size:17px}
+.fallo p{color:var(--muted);font-size:15px}
+.fallo a{font-size:13px;margin-top:auto;padding-top:4px}
+.estudios{max-width:80ch;font-size:16px}
+.prueba{display:flex;flex-direction:column;gap:12px}
+.muestras{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:700px){.muestras{grid-template-columns:1fr}}
+.muestras figure{margin:0;background:var(--bg);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.muestras figcaption{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.03em}
+.muestras blockquote{margin:0;font-size:16px;line-height:1.6;flex:1}
+.muestras .btn{align-self:flex-start}
+footer{border-top:1px solid var(--line);padding-block:24px 40px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* Movimiento: solo transform y opacity (fluido en celulares sencillos); se apaga con «reducir movimiento» */
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0)*70ms)}
+.js .rv.vis{opacity:1;transform:none}
+.srv,.fallo,.metodos li,.flujo li,.urg>div{transition:transform .2s ease,box-shadow .2s ease,border-color .2s,opacity .5s ease}
+@media (hover:hover){.srv:hover,.fallo:hover,.metodos li:hover,.flujo li:hover,.urg>div:hover{transform:translateY(-3px);box-shadow:0 12px 26px -14px rgba(10,76,80,.45);border-color:var(--sea)}}
+.btn{transition:transform .12s ease,filter .2s}.btn:hover{filter:brightness(1.08)}.btn:active{transform:scale(.97)}
+.bar nav a{transition:background-color .2s,color .2s}.bar nav a.activo:not(.cta){background:var(--sea-soft);color:var(--sea)}
+.hero{position:relative;overflow:hidden}.hero .wrap{position:relative;z-index:1}
+.hero::after{content:"";position:absolute;top:-160px;right:-120px;width:440px;height:440px;border-radius:50%;background:radial-gradient(circle,rgba(255,210,138,.28),transparent 65%);animation:flota 12s ease-in-out infinite alternate;pointer-events:none}
+@keyframes flota{to{transform:translate(-70px,50px) scale(1.15)}}
+.hero h1,.hero p,.claves li{animation:sube .7s cubic-bezier(.2,.7,.2,1) both}
+.hero p{animation-delay:.12s}.claves li:nth-child(1){animation-delay:.2s}.claves li:nth-child(2){animation-delay:.28s}.claves li:nth-child(3){animation-delay:.36s}
+@keyframes sube{from{opacity:0;transform:translateY(16px)}}
+.total b{display:inline-block}.total b.late{animation:late .35s ease}
+@keyframes late{50%{transform:scale(1.07)}}
+details[open] p{animation:sube .3s ease}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.js .rv{opacity:1;transform:none}}
+
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="wrap">
+  <a class="marca" href="index.html">Asesoría Académica</a>
+  <nav aria-label="Secciones">
+    <a href="#como">Cómo se calcula</a><a href="#calcula">Calcula</a><a href="#precios">Precios</a><a href="#calidad">Calidad</a><a href="#detectores">Detectores</a><a href="#pago">Pago</a><a href="#dudas">Dudas</a><a href="#escribenos">Quejas y sugerencias</a><a class="cta" href="index.html#form">Pedir</a>
+  </nav>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <span class="tag">Precios 2026-2 · Uniguajira</span>
+  <h1>Sabes cuánto pagas <em>antes</em> de empezar</h1>
+  <p>Aquí está cómo se calcula el precio, con ejemplos y una calculadora. Si algo no te gustó o tienes una idea, abajo hay un buzón para decirlo.</p>
+  <ul class="claves">
+    <li><b>Pagas por grupo</b>Paga una sola persona y se reparten entre ustedes.</li>
+    <li><b>Mitad y mitad</b>La mitad para empezar y la otra cuando ves el trabajo.</li>
+    <li><b>Sin cobros escondidos</b>El precio que te confirmo por correo es el que pagas.</li>
+  </ul>
+</div></header>
+
+<main class="wrap">
+
+<section id="como">
+  <div class="cab"><span class="paso-n">1 · Lo básico</span><h2>¿Cómo se calcula el precio?</h2>
+    <p class="muted">Una exposición se cobra con una regla de dos partes. Así un trabajo corto no sale caro y uno largo paga lo que de verdad lleva.</p></div>
+  <div class="ecuacion" aria-label="Base de 5.000 más 1.000 por diapositiva">
+    <div class="t"><b>$5.000</b><span><strong>Base.</strong> Entender tu tema, armar el guion y pensar las preguntas del profe. Cuesta lo mismo con 6 que con 15 diapositivas.</span></div>
+    <div class="op" aria-hidden="true">+</div>
+    <div class="t"><b>$1.000</b><span><strong>Por cada diapositiva.</strong> Lo que cambia según el tamaño de la exposición.</span></div>
+    <div class="op" aria-hidden="true">=</div>
+    <div class="t res"><b>Tu precio</b><span>Por ejemplo, 10 diapositivas: 5.000 + 10.000 = <strong>$15.000</strong> el grupo.</span></div>
+  </div>
+  <div class="ejemplo">
+    <div class="card">
+      <h3>Ejemplo paso a paso</h3>
+      <p class="muted" style="margin:4px 0 14px">Grupo de 4 personas, exposición de 10 diapositivas, para dentro de una semana.</p>
+      <ol class="pasos">
+        <li><span>Se pone la base: <b>$5.000</b>.</span></li>
+        <li><span>Se suman las diapositivas: 10 × 1.000 = <b>$10.000</b>.</span></li>
+        <li><span>Total del grupo: 5.000 + 10.000 = <b>$15.000</b>.</span></li>
+        <li><span>Entre los 4 sale a <b>$3.750</b> por persona.</span></li>
+        <li><span>Para empezar se paga la mitad: <b>$7.500</b>. El resto, cuando ves el trabajo.</span></li>
+      </ol>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:12px">
+      <h3>¿Y si son más de 4?</h3>
+      <p class="muted">Cada integrante después del cuarto suma <b>$1.000</b>, porque son más partes del guion que preparar. Un grupo de 6 con 10 diapositivas: 15.000 + 2.000 = <b>$17.000</b>.</p>
+      <h3>¿Y si es para mañana?</h3>
+      <p class="muted">Lo urgente cuesta más porque hay que dejar todo lo demás. Mira la tabla de <a href="#urgencia">urgencia</a>.</p>
+      <p class="nota"><b>Tip:</b> pedir con tiempo te sale más barato y el trabajo queda mejor.</p>
+    </div>
+  </div>
+</section>
+
+<section id="calcula">
+  <div class="cab"><span class="paso-n">2 · Pruébalo</span><h2>Calcula tu precio</h2>
+    <p class="muted">Es el precio normal. Al pedir te confirmo el valor final por correo, y nunca es más de lo que ves aquí para lo mismo.</p></div>
+  <div class="calc">
+    <div class="card campos">
+      <div class="f"><label for="srv">¿Qué necesitas?</label><select id="srv"></select><span class="hint" id="srvTxt"></span></div>
+      <div class="dos">
+        <div class="f"><label for="n" id="nLab">Diapositivas</label><input id="n" type="number" inputmode="numeric" min="1" max="80" value="10"><select id="nDur" hidden aria-label="Duración"><option value="1">30 min</option><option value="2">1 hora</option><option value="3">1 h 30 min</option><option value="4">2 horas</option><option value="6">3 horas</option></select></div>
+        <div class="f" id="intBox"><label for="integ">Personas en el grupo</label><input id="integ" type="number" inputmode="numeric" min="1" max="15" value="4"></div>
+      </div>
+      <div class="f"><span class="lbl" id="urgLbl">¿Para cuándo?</span>
+        <div class="chips" role="radiogroup" aria-labelledby="urgLbl">
+          <label><input type="radio" name="urg" value="1" checked>3 días o más</label>
+          <label><input type="radio" name="urg" value="1.3">Menos de 48 h</label>
+          <label><input type="radio" name="urg" value="1.5">Menos de 24 h</label>
+        </div></div>
+    </div>
+    <div class="card recibo" aria-live="polite">
+      <h3 id="rNombre">Expo lista</h3>
+      <div class="lineas" id="lineas"></div>
+      <hr class="corte">
+      <div class="total"><span>Total del grupo</span><b id="total">—</b></div>
+      <div class="mitades">
+        <div><small>Para empezar (50 %)</small><b id="ant">—</b></div>
+        <div><small>Al ver el trabajo</small><b id="sal">—</b></div>
+      </div>
+      <p class="hint" id="cabeza"></p>
+      <a class="btn" href="index.html#form">Pedir cotización</a>
+    </div>
+  </div>
+</section>
+
+<section id="precios">
+  <div class="cab"><span class="paso-n">3 · Todo lo que hago</span><h2>Lista de precios</h2>
+    <p class="muted">Precios por grupo o por trabajo, en pesos. El total se redondea a los 500 de arriba.</p></div>
+  <div class="lista" id="lista"></div>
+</section>
+
+<section id="urgencia">
+  <div class="cab"><span class="paso-n">4 · El tiempo cuenta</span><h2>Urgencia</h2>
+    <p class="muted">Se cuenta desde que llega el anticipo hasta la hora en que necesitas el trabajo.</p></div>
+  <div class="urg">
+    <div><b>Precio normal</b><span class="muted">3 días o más</span></div>
+    <div><b>+30 %</b><span class="muted">Menos de 48 horas. 15.000 pasa a 19.500.</span></div>
+    <div><b>+50 %</b><span class="muted">Menos de 24 horas. 15.000 pasa a 22.500.</span></div>
+  </div>
+</section>
+
+<section id="calidad">
+  <div class="cab"><span class="paso-n">5 · Calidad</span><h2>Hecho para tu tema, no en serie</h2>
+    <p class="muted">Un texto genérico se nota aunque nadie use un detector: frases de relleno, ejemplos que no son de tu carrera, datos sin fuente. Así lo evito.</p></div>
+  <ol class="metodos">
+    <li><b>Parto de lo que pidió tu profe</b>La guía, la rúbrica, la plantilla y tus apuntes. Si el profe pidió 5 puntos, van esos 5.</li>
+    <li><b>Fuentes reales</b>Cada dato sale de una fuente que se puede abrir y revisar. Nada de citas inventadas.</li>
+    <li><b>Ejemplos de aquí</b>Casos de La Guajira, de Colombia o de tu carrera, no ejemplos genéricos de internet.</li>
+    <li><b>Palabras de estudiante</b>Frases cortas y claras. Sin «es importante destacar» ni «en el mundo actual».</li>
+    <li><b>Diseño propio para cada grupo</b>Cada exposición tiene su estilo. No se repite la misma plantilla entre grupos.</li>
+    <li><b>Lo entiendes antes de exponer</b>El guion va en palabras sencillas y trae las preguntas probables para que practiques.</li>
+  </ol>
+  <div class="antes">
+    <div class="card"><span class="eti mal">Texto genérico</span><p>«En el vertiginoso mundo actual, la contabilidad desempeña un papel crucial y fundamental en el éxito de las organizaciones, ya que permite tomar decisiones informadas.»</p><p class="hint">Tres palabras de relleno, nada concreto, sirve para cualquier tema.</p></div>
+    <div class="card"><span class="eti bien">Como lo hago</span><p>«La contabilidad le dice a una tienda si está ganando o perdiendo plata. Sin ese dato, el dueño no sabe si le alcanza para pagar el arriendo del mes.»</p><p class="hint">Un ejemplo que cualquiera entiende y que tú puedes explicar con tus palabras.</p></div>
+  </div>
+  <div class="card relleno">
+    <h3>Prueba: ¿tu texto tiene frases de relleno?</h3>
+    <p class="muted">Pega un párrafo tuyo. Se marcan las frases que hacen sonar genérico cualquier texto, lo haya escrito quien lo haya escrito. Esto <b>no</b> es un detector de IA: mira abajo por qué esos fallan.</p>
+    <textarea id="rTxt" aria-label="Texto para revisar">En el vertiginoso mundo actual, la contabilidad desempeña un papel crucial en las organizaciones. Es importante destacar que permite tomar decisiones informadas. En conclusión, es fundamental para el éxito.</textarea>
+    <div class="r-res" aria-live="polite"><p id="rCuenta"></p><div id="rVista" class="r-vista"></div></div>
+  </div>
+</section>
+
+<section id="detectores">
+  <div class="cab"><span class="paso-n">6 · Ojo con los detectores</span><h2>Los detectores de IA se equivocan, incluso con la Biblia</h2>
+    <p class="muted">Herramientas como ZeroGPT dicen «cuánto de un texto es IA», pero han marcado como IA textos escritos siglos antes de que existiera. Esto es lo que se ha publicado:</p></div>
+  <div class="fallos">
+    <article class="fallo"><b>88 %</b><h3>Génesis, la Biblia</h3><p>ZeroGPT lo marcó como 88,2 % IA.</p><a href="https://www.xataka.com/robotica-e-ia/escribir-bien-sospechoso-detectores-ia-marcan-biblia-cien-anos-soledad-como-obras-hechas-maquinas" target="_blank" rel="noopener">Xataka, mar. 2026</a></article>
+    <article class="fallo"><b>96 %</b><h3>Constitución de EE. UU. (1787)</h3><p>ZeroGPT la marcó como 96,21 % IA.</p><a href="https://www.xataka.com/robotica-e-ia/escribir-bien-sospechoso-detectores-ia-marcan-biblia-cien-anos-soledad-como-obras-hechas-maquinas" target="_blank" rel="noopener">Xataka, mar. 2026</a></article>
+    <article class="fallo"><b>100 %</b><h3><i>Cien años de soledad</i> (1967)</h3><p>García Márquez, según ZeroGPT, sería 100 % IA.</p><a href="https://www.xataka.com/robotica-e-ia/escribir-bien-sospechoso-detectores-ia-marcan-biblia-cien-anos-soledad-como-obras-hechas-maquinas" target="_blank" rel="noopener">Xataka, mar. 2026</a></article>
+    <article class="fallo"><b>26 %</b><h3>OpenAI cerró su propio detector</h3><p>Solo reconocía el 26 % del texto hecho con IA y marcaba mal el 9 % del texto humano.</p><a href="https://decrypt.co/149826/openai-quietly-shutters-its-ai-text-classifier-due-to-low-accuracy" target="_blank" rel="noopener">Decrypt, jul. 2023</a></article>
+    <article class="fallo"><b>~750</b><h3>Vanderbilt lo apagó</h3><p>La universidad desactivó el detector de Turnitin: con un 1 % de error, unos 750 de sus 75.000 trabajos al año quedarían mal marcados.</p><a href="https://www.vanderbilt.edu/brightspace/2023/08/16/guidance-on-ai-detection-and-why-were-disabling-turnitins-ai-detector/" target="_blank" rel="noopener">Vanderbilt, ago. 2023</a></article>
+    <article class="fallo"><b>4 %</b><h3>Turnitin lo reconoce</h3><p>De cada 100 oraciones que marca como IA, unas 4 las escribió una persona.</p><a href="https://www.turnitin.co.uk/blog/understanding-the-false-positive-rate-for-sentences-of-our-ai-writing-detection-capability" target="_blank" rel="noopener">Turnitin, jun. 2023</a></article>
+  </div>
+  <p class="muted estudios">Los estudios dicen lo mismo: uno de Stanford encontró que los detectores marcan como IA los textos de quienes escriben en un idioma que no es el suyo (<a href="https://arxiv.org/abs/2304.02819" target="_blank" rel="noopener">Liang y otros, 2023</a>), y otro que probó 14 herramientas, Turnitin incluida, concluyó que no son fiables (<a href="https://arxiv.org/abs/2306.15666" target="_blank" rel="noopener">Weber-Wulff y otros, 2023</a>).</p>
+  <div class="card prueba">
+    <h3>Pruébalo tú</h3>
+    <p class="muted">Copia uno de estos textos, pégalo en un detector y mira qué dice. Ninguno lo escribió una IA.</p>
+    <div class="muestras">
+      <figure><figcaption>Génesis 1:1-4 · Reina-Valera 1909</figcaption><blockquote id="t1">En el principio crió Dios los cielos y la tierra. Y la tierra estaba desordenada y vacía, y las tinieblas estaban sobre la haz del abismo, y el Espíritu de Dios se movía sobre la haz de las aguas. Y dijo Dios: Sea la luz: y fué la luz. Y vió Dios que la luz era buena: y apartó Dios la luz de las tinieblas.</blockquote><button type="button" class="btn sec mini" data-copiar="t1">Copiar texto</button></figure>
+      <figure><figcaption>Preámbulo de la Constitución de EE. UU. · 1787</figcaption><blockquote id="t2" lang="en">We the People of the United States, in Order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defence, promote the general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity, do ordain and establish this Constitution for the United States of America.</blockquote><button type="button" class="btn sec mini" data-copiar="t2">Copiar texto</button></figure>
+    </div>
+    <p class="hint">Detectores para probar: <a href="https://www.zerogpt.com/" target="_blank" rel="noopener">ZeroGPT</a> · <a href="https://gptzero.me/" target="_blank" rel="noopener">GPTZero</a>. El resultado cambia con cada versión del detector.</p>
+  </div>
+  <p class="nota"><b>¿Qué significa para ti?</b> Un porcentaje de un detector no prueba quién escribió algo. Lo que de verdad te respalda es entender tu exposición y responder bien las preguntas. Para eso van el guion y las preguntas probables.</p>
+</section>
+
+<section id="pago">
+  <div class="cab"><span class="paso-n">7 · Sin riesgo</span><h2>Cómo pagas</h2>
+    <p class="muted">Nunca pagas todo antes de ver el trabajo.</p></div>
+  <ol class="flujo">
+    <li><b>Pides</b>Llenas el formulario una sola vez por todo el grupo.</li>
+    <li><b>Te confirmo</b>Te llega por correo el precio, la mitad y la fecha de entrega.</li>
+    <li><b>Pagas la mitad</b>Por Nequi. El trabajo empieza cuando entra.</li>
+    <li><b>Ves y pagas el resto</b>Revisas una vista previa; con el saldo te llegan los archivos.</li>
+  </ol>
+  <div class="incluye">
+    <div class="card"><h3>Va incluido</h3><ul>
+      <li>Una ronda de correcciones después de la vista previa.</li>
+      <li>En la Expo lista: guion para cada integrante y las preguntas probables del profe.</li>
+      <li>Los archivos listos para presentar.</li>
+    </ul></div>
+    <div class="card"><h3>No va incluido</h3><ul>
+      <li>Hacer exámenes o entrar a plataformas con tu usuario.</li>
+      <li>Cambios de tema después de empezar: eso es un trabajo nuevo.</li>
+      <li>Correcciones extra después de la primera ronda: se cotizan aparte.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="dudas">
+  <div class="cab"><span class="paso-n">8 · Preguntas</span><h2>Dudas frecuentes</h2></div>
+  <div>
+    <details><summary>¿Por qué hay una base y no solo un precio por diapositiva?</summary><p>Porque lo que más tiempo lleva no son las diapositivas, sino entender tu tema, ordenar lo que va a decir cada uno y pensar qué te puede preguntar el profe. Eso cuesta lo mismo con pocas o muchas diapositivas.</p></details>
+    <details><summary>¿Se paga por persona?</summary><p>No. Se paga por grupo y una sola persona hace el pago. Ustedes se reparten como quieran; la calculadora te muestra cuánto sale por cabeza.</p></details>
+    <details><summary>¿Y si no me gusta cómo quedó?</summary><p>Antes de pagar el resto ves una vista previa. Ahí me dices qué cambiar y lo corrijo una vez sin costo. Si algo sigue mal, escribe en el buzón de abajo.</p></details>
+    <details><summary>¿El profe va a notar que no la hice yo?</summary><p>La exposición va hecha para que la entiendas y la puedas defender: con guion en palabras sencillas y las preguntas probables. Es única, no se repite entre grupos. La exposición la presentas tú. Y ojo: los detectores de IA se equivocan seguido; mira <a href="#detectores">los ejemplos</a>.</p></details>
+    <details><summary>¿Cómo pago?</summary><p>Por Nequi, con QR o número. Los dos te llegan solo en el correo de confirmación, junto con el valor de la mitad. Si alguien te pide pagar a otro número o por otro medio, no es de aquí.</p></details>
+  </div>
+</section>
+
+<section id="escribenos">
+  <div class="cab"><span class="paso-n">9 · Tu opinión</span><h2>Quejas, sugerencias y preguntas</h2>
+    <p class="muted">Si algo salió mal, si tienes una idea o si algo no quedó claro, escríbelo aquí. Lo leo todo.</p></div>
+  <div class="buzon">
+    <div class="info">
+      <ul class="muted">
+        <li>Puedes escribir sin poner tu nombre.</li>
+        <li>Si quieres respuesta, deja tu correo. Respondo solo por correo.</li>
+        <li>Si es sobre un pedido, pon el código que te llegó (empieza por ENC-).</li>
+        <li>También puedes escribir a <a href="mailto:asesoriaacademica.gj@gmail.com">asesoriaacademica.gj@gmail.com</a>.</li>
+      </ul>
+    </div>
+    <form class="card campos" id="fCom" novalidate>
+      <div class="f"><span class="lbl" id="tipoLbl">¿Qué quieres contar?</span>
+        <div class="chips" role="radiogroup" aria-labelledby="tipoLbl">
+          <label><input type="radio" name="clase" value="Queja">Queja</label>
+          <label><input type="radio" name="clase" value="Sugerencia" checked>Sugerencia</label>
+          <label><input type="radio" name="clase" value="Pregunta">Pregunta</label>
+          <label><input type="radio" name="clase" value="Felicitación">Felicitación</label>
+        </div></div>
+      <div class="f"><label for="cMsg">Tu mensaje</label><textarea id="cMsg" maxlength="2000" required placeholder="Cuéntame qué pasó o qué se podría mejorar"></textarea><span class="cuenta" id="cuenta">0 / 2000</span></div>
+      <div class="dos">
+        <div class="f"><label for="cNom">Nombre <span class="hint">(opcional)</span></label><input id="cNom" autocomplete="name" maxlength="80"></div>
+        <div class="f"><label for="cEnc">Código del pedido <span class="hint">(opcional)</span></label><input id="cEnc" placeholder="ENC-261003-001" maxlength="40" autocapitalize="characters"></div>
+      </div>
+      <div class="f"><label for="cCon">Tu correo <span class="hint">(si quieres respuesta)</span></label><input id="cCon" type="email" inputmode="email" autocomplete="email" maxlength="120" placeholder="tucorreo@gmail.com"></div>
+      <input class="trampa" id="cWeb" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div id="cEstado" aria-live="polite"></div>
+      <button class="btn" id="cEnviar" type="submit">Enviar</button>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer><div class="wrap">
+  <span>Servicio independiente; no tiene relación con la Universidad de La Guajira.</span>
+  <span><a href="index.html">Pedir cotización</a> · <a href="#escribenos">Quejas y sugerencias</a></span>
+</div></footer>
+
+<script>
+(() => {
+const API = 'https://script.google.com/macros/s/AKfycbzGjkjxWNifSsRmzeNh6ZwoiGk-9n8aQOsjeJkXb4yqdY6WXeN_hPzvUqLJqWDTANo-Ew/exec';
+const $ = id => document.getElementById(id);
+const cop = v => '$' + Math.round(v).toLocaleString('es-CO');
+const up = (v, m) => Math.ceil(v / m) * m;
+const pl = (n, a, b) => n === 1 ? a : b;
+const dur = n => n === 1 ? '30 min' : (n % 2 ? `${(n - 1) / 2} h 30 min` : `${n / 2} h`);
+
+// Precios de lista. lineas(n) devuelve [concepto, valor].
+const SRV = {
+  expo: {nombre: 'Expo lista', top: true, ejs: [8, 10, 12], unidad: 'Diapositivas', def: 10, grupo: true,
+    txt: 'Diapositivas, guion para cada integrante y las preguntas probables del profe.',
+    formula: 'Base de $5.000 más $1.000 por cada diapositiva.', ej: '10 diapositivas',
+    lineas: n => [['Base: tema, guion y preguntas', 5000], [`${n} ${pl(n, 'diapositiva', 'diapositivas')} × 1.000`, 1000 * n]]},
+  diap: {nombre: 'Solo diapositivas', ejs: [8, 10, 12], unidad: 'Diapositivas', def: 10, grupo: true,
+    txt: 'Las diapositivas bien hechas, sin guion ni preguntas.',
+    formula: 'Base de $2.000 más $1.000 por cada diapositiva.', ej: '10 diapositivas',
+    lineas: n => [['Base: estructura y diseño', 2000], [`${n} ${pl(n, 'diapositiva', 'diapositivas')} × 1.000`, 1000 * n]]},
+  guia: {nombre: 'Guía de estudio', ejs: [1, 2], unidad: 'Guías', def: 1, grupo: true,
+    txt: 'Resumen del tema con preguntas de práctica para el parcial.',
+    formula: '$5.000 por cada guía.', ej: '1 guía',
+    lineas: n => [[`${n} ${pl(n, 'guía', 'guías')} × 5.000`, 5000 * n]]},
+  expl: {nombre: 'Explicación por llamada', unidad: 'Duración', def: 2, grupo: false, dur: true,
+    txt: 'Te explico un tema o un taller por llamada o videollamada, con tus apuntes o el taller del profe.',
+    formula: 'Primera media hora $6.000. Cada media hora más, $5.000.', ej: '1 hora', ejs: [1, 2, 3],
+    lineas: n => [['Primera media hora', 6000]].concat(n > 1 ? [[`${n - 1} ${pl(n - 1, 'media hora', 'medias horas')} más × 5.000`, 5000 * (n - 1)]] : []),
+    eti: n => dur(n)},
+  apa: {nombre: 'Revisión APA y redacción', ejs: [5, 8, 12], unidad: 'Páginas', def: 8, grupo: false,
+    txt: 'Reviso normas APA, citas, ortografía y redacción de un trabajo ya hecho.',
+    formula: '$4.000 hasta 5 páginas. Cada página más, $800.', ej: '8 páginas',
+    lineas: n => [['Hasta 5 páginas', 4000]].concat(n > 5 ? [[`${n - 5} ${pl(n - 5, 'página extra', 'páginas extra')} × 800`, 800 * (n - 5)]] : [])},
+  mapa: {nombre: 'Mapa conceptual o cuadro', ejs: [1, 2], unidad: 'Mapas o cuadros', def: 1, grupo: false,
+    txt: 'Mapa conceptual, cuadro comparativo o sinóptico.',
+    formula: '$6.000 por cada mapa o cuadro.', ej: '1 mapa',
+    lineas: n => [[`${n} × 6.000`, 6000 * n]]},
+  inf: {nombre: 'Informe o ensayo guía', ejs: [3, 5], unidad: 'Páginas', def: 5, grupo: false,
+    txt: 'Un borrador guía para que tú lo trabajes y lo hagas tuyo.',
+    formula: 'Base de $3.000 más $2.500 por página.', ej: '5 páginas',
+    lineas: n => [['Base', 3000], [`${n} ${pl(n, 'página', 'páginas')} × 2.500`, 2500 * n]]},
+};
+function cotizar(s, n, integ, u) {
+  const d = SRV[s], L = d.lineas(n);
+  if (s === 'expo' && integ > 4) L.push([`${integ - 4} ${pl(integ - 4, 'persona', 'personas')} más × 1.000`, 1000 * (integ - 4)]);
+  const sub = L.reduce((a, x) => a + x[1], 0);
+  if (u > 1) L.push([`Urgencia +${Math.round((u - 1) * 100)} %`, sub * (u - 1)]);
+  const total = up(sub * u, 500), ant = up(total / 2, 100);
+  return {L, total, ant, sal: total - ant};
+}
+
+const sel = $('srv');
+for (const [k, d] of Object.entries(SRV)) sel.add(new Option(d.nombre, k));
+let prev = 'expo';
+function calc() {
+  const s = sel.value, d = SRV[s];
+  if (s !== prev) { $('n').value = d.def; $('nDur').value = d.def; prev = s; }
+  $('n').hidden = !!d.dur; $('nDur').hidden = !d.dur;
+  const n = d.dur ? +$('nDur').value : Math.min(80, Math.max(1, Math.round(+$('n').value || 1))), integ = Math.min(15, Math.max(1, Math.round(+$('integ').value || 1)));
+  const u = +document.querySelector('input[name=urg]:checked').value;
+  $('nLab').textContent = d.unidad; $('nLab').htmlFor = d.dur ? 'nDur' : 'n'; $('srvTxt').textContent = d.txt; $('intBox').hidden = !d.grupo;
+  const r = cotizar(s, n, integ, u);
+  $('rNombre').textContent = d.nombre;
+  $('lineas').innerHTML = r.L.map(x => `<div><span>${x[0]}</span><span>${cop(x[1])}</span></div>`).join('');
+  $('total').textContent = cop(r.total); $('ant').textContent = cop(r.ant); $('sal').textContent = cop(r.sal);
+  $('cabeza').textContent = d.grupo && integ > 1 ? `Entre ${integ} personas sale a unos ${cop(up(r.total / integ, 50))} cada una.` : '';
+}
+document.querySelectorAll('#calcula select, #calcula input').forEach(e => e.addEventListener('input', calc));
+calc();
+
+const eti = (d, n) => d.eti ? d.eti(n) : `${n} ${pl(n, d.unidad.toLowerCase().replace(/s\b/g, ''), d.unidad.toLowerCase())}`;
+$('lista').innerHTML = Object.entries(SRV).map(([k, d]) => `<article class="srv${d.top ? ' top' : ''}">
+    <div class="srv-cab"><h3>${d.nombre}</h3>${d.top ? '<span class="sello">El más pedido</span>' : ''}</div>
+    <p class="muted">${d.txt}</p>
+    <p class="formula"><span>Cómo se cobra</span>${d.formula}</p>
+    <dl class="ejs">${d.ejs.map(n => `<div><dt>${eti(d, n)}</dt><dd>${cop(cotizar(k, n, 4, 1).total)}</dd></div>`).join('')}</dl>
+    <button type="button" class="btn sec mini" data-srv="${k}">Calcular el mío</button></article>`).join('');
+document.querySelectorAll('[data-srv]').forEach(b => b.addEventListener('click', () => {
+  sel.value = b.dataset.srv; calc(); $('calcula').scrollIntoView(); setTimeout(() => sel.focus({preventScroll: true}), 400);
+}));
+
+// Frases de relleno típicas de textos genéricos (con sugerencia).
+const RELLENO = [
+  ['en el vertiginoso mundo', 'empieza por el dato concreto'], ['en el mundo actual', 'di de qué lugar o año hablas'], ['en la actualidad', 'pon el año o quítalo'],
+  ['en un mundo cada vez más', 'di qué cambió y desde cuándo'], ['hoy en día', 'pon el año o quítalo'], ['a lo largo de la historia', 'di qué época'],
+  ['desde tiempos inmemoriales', 'di desde cuándo'], ['es importante destacar', 'di el dato directamente'], ['es importante señalar', 'di el dato directamente'],
+  ['cabe destacar', 'di el dato directamente'], ['cabe resaltar', 'di el dato directamente'], ['cabe mencionar', 'di el dato directamente'],
+  ['vale la pena mencionar', 'di el dato directamente'], ['juega un papel', 'di qué hace exactamente'], ['desempeña un papel', 'di qué hace exactamente'],
+  ['papel fundamental', 'di qué hace exactamente'], ['papel crucial', 'di qué hace exactamente'], ['de vital importancia', 'explica por qué importa'],
+  ['es fundamental', 'explica por qué'], ['es crucial', 'explica por qué'], ['es esencial', 'explica por qué'], ['sin lugar a dudas', 'quítalo; si es cierto, no hace falta'],
+  ['no cabe duda', 'quítalo; si es cierto, no hace falta'], ['en conclusión', 'cierra con tu idea principal, sin anunciarla'], ['en resumen', 'cierra con tu idea principal'],
+  ['en definitiva', 'cierra con tu idea principal'], ['en este sentido', 'quítalo'], ['un sinfín de', 'di cuántos'], ['una amplia gama de', 'di cuáles'],
+  ['una gran variedad de', 'di cuáles'], ['decisiones informadas', 'di qué decisión'], ['adentrarnos', 'usa «ver» o «revisar»'], ['sumergirnos', 'usa «ver» o «revisar»'],
+  ['panorama', 'di qué situación'], ['sinergia', 'di quién trabaja con quién'], ['holístico', 'di qué partes incluye'], ['paradigma', 'di qué idea cambió'],
+  ['potenciar', 'usa «mejorar» y di cómo'], ['fomentar', 'di qué acción concreta'], ['revolucionario', 'di qué cambió y cuánto'], ['transformador', 'di qué cambió'],
+  ['innovador', 'di qué tiene de nuevo'], ['crucial', 'explica por qué importa'], ['fundamental', 'explica por qué importa'], ['tapiz', 'dilo sin metáfora'],
+];
+const escH = s => s.replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const sinTilde = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+function revisar() {
+  const txt = $('rTxt').value, base = sinTilde(txt), marcas = [];
+  for (const [f, tip] of RELLENO) {
+    const re = new RegExp('(^|[^a-z])(' + sinTilde(f).replace(/ /g, '\\s+') + ')(?=[^a-z]|$)', 'g'); let m;
+    while ((m = re.exec(base))) { const a = m.index + m[1].length, b = a + m[2].length; if (!marcas.some(x => a < x[1] && b > x[0])) marcas.push([a, b, tip]); }
+  }
+  marcas.sort((x, y) => x[0] - y[0]);
+  let h = '', i = 0;
+  for (const [a, b, tip] of marcas) { h += escH(txt.slice(i, a)) + `<mark title="Mejor: ${escH(tip)}">${escH(txt.slice(a, b))}</mark>`; i = b; }
+  $('rVista').innerHTML = h + escH(txt.slice(i));
+  const pal = (txt.match(/\S+/g) || []).length;
+  $('rCuenta').textContent = !pal ? 'Pega un texto para revisarlo.' : marcas.length
+    ? `${marcas.length} ${pl(marcas.length, 'frase', 'frases')} de relleno en ${pal} palabras. Toca o pasa el cursor por cada una para ver qué poner.`
+    : `Sin frases de relleno de la lista en ${pal} palabras.`;
+}
+$('rTxt').addEventListener('input', revisar); revisar();
+$('rVista').addEventListener('click', e => { if (e.target.tagName === 'MARK') $('rCuenta').textContent = `«${e.target.textContent}» → ${e.target.title}`; });
+
+document.querySelectorAll('[data-copiar]').forEach(b => b.addEventListener('click', async () => {
+  const el = $(b.dataset.copiar), txt = el.textContent.trim();
+  try { await navigator.clipboard.writeText(txt); }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); } catch (e2) {} }
+  b.textContent = 'Copiado'; setTimeout(() => b.textContent = 'Copiar texto', 1500);
+}));
+
+// Buzón: guarda el borrador en este navegador y lo manda al mismo servicio de los pedidos.
+const KEY = 'buzon-borrador-v1', msg = $('cMsg');
+try { msg.value = localStorage.getItem(KEY) || ''; } catch (e) {}
+const cuenta = () => $('cuenta').textContent = `${msg.value.length} / 2000`;
+msg.addEventListener('input', () => { cuenta(); try { localStorage.setItem(KEY, msg.value); } catch (e) {} });
+cuenta();
+const estado = (cls, html) => { $('cEstado').className = 'estado ' + cls; $('cEstado').innerHTML = html; };
+$('fCom').addEventListener('submit', async ev => {
+  ev.preventDefault();
+  const texto = msg.value.trim();
+  if (texto.length < 5) { estado('mal', 'Escribe tu mensaje antes de enviar.'); msg.focus(); return; }
+  const con = $('cCon').value.trim();
+  if (con && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(con)) { estado('mal', 'Revisa tu correo: parece incompleto.'); $('cCon').focus(); return; }
+  const clase = document.querySelector('input[name=clase]:checked').value;
+  const btn = $('cEnviar'); btn.disabled = true; btn.textContent = 'Enviando…';
+  try {
+    const r = await fetch(API, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({
+      tipo: 'comentario', clase, mensaje: texto, nombre: $('cNom').value.trim(), encargo: $('cEnc').value.trim(),
+      contacto: $('cCon').value.trim(), web: $('cWeb').value})}).then(x => x.json());
+    if (!r.ok) throw new Error(r.error || 'error');
+    estado('ok', `<b>¡Gracias! Llegó tu mensaje.</b><br>Tu código es <b>${r.code}</b>. ${$('cCon').value.trim() ? 'Te respondo a tu correo.' : 'Como no dejaste correo, no te puedo responder, pero lo leo igual.'}`);
+    msg.value = ''; cuenta(); try { localStorage.removeItem(KEY); } catch (e) {}
+  } catch (e) {
+    const asunto = encodeURIComponent(clase + ' desde la página'), cuerpo = encodeURIComponent(texto);
+    estado('mal', `<b>No se pudo enviar.</b> Tu mensaje sigue guardado aquí. Revisa tu conexión e inténtalo otra vez, o mándalo por <a href="https://mail.google.com/mail/?view=cm&to=asesoriaacademica.gj@gmail.com&su=${asunto}&body=${cuerpo}" target="_blank" rel="noopener">Gmail</a>.`);
+  } finally { btn.disabled = false; btn.textContent = 'Enviar'; }
+});
+})();
+
+// Movimiento: revela bloques al entrar en pantalla, marca en el menú la sección visible y hace latir el total al cambiar
+(() => {
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.documentElement.classList.add('js');
+  const ver = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('vis'); ver.unobserve(e.target); }
+  }), { rootMargin: '0px 0px -8% 0px', threshold: .1 });
+  document.querySelectorAll('.ecuacion .t,.ejemplo>.card,.srv,.urg>div,.metodos li,.antes .card,.fallo,.flujo li,.incluye>*,details,.prueba,.relleno').forEach(el => {
+    el.classList.add('rv');
+    el.style.setProperty('--i', [...el.parentElement.children].indexOf(el) % 6);
+    ver.observe(el);
+  });
+  const links = new Map([...document.querySelectorAll('.bar nav a[href^="#"]')].map(a => [a.hash.slice(1), a]));
+  const spy = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    links.forEach(a => a.classList.remove('activo'));
+    const a = links.get(e.target.id);
+    if (a) {
+      a.classList.add('activo');
+      const nav = a.parentElement, x = a.offsetLeft - nav.offsetLeft;
+      if (x < nav.scrollLeft || x + a.offsetWidth > nav.scrollLeft + nav.clientWidth)
+        nav.scrollTo({ left: x - 8, behavior: 'smooth' });
+    }
+  }), { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('main section[id]').forEach(s => spy.observe(s));
+  const tot = document.querySelector('.total b');
+  if (tot) new MutationObserver(() => { tot.classList.remove('late'); void tot.offsetWidth; tot.classList.add('late'); })
+    .observe(tot, { childList: true, characterData: true, subtree: true });
+})();
+</script>
+</body>
+</html>
