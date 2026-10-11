@@ -261,28 +261,28 @@ details[open] p{animation:sube .3s ease}
 <section id="como">
   <div class="cab"><span class="paso-n">1 · Lo básico</span><h2>¿Cómo se calcula el precio?</h2>
     <p class="muted">Una exposición se cobra con una regla de dos partes. Así un trabajo corto no sale caro y uno largo paga lo que de verdad lleva.</p></div>
-  <div class="ecuacion" aria-label="Base de 6.000 más 1.500 por diapositiva">
-    <div class="t"><b>$6.000</b><span><strong>Base.</strong> Entender tu tema, armar el guion y pensar las preguntas del profe. Cuesta lo mismo con 6 que con 15 diapositivas.</span></div>
+  <div class="ecuacion" aria-label="Base de 5.500 más 1.200 por diapositiva">
+    <div class="t"><b>$5.500</b><span><strong>Base.</strong> Entender tu tema, armar el guion y pensar las preguntas del profe. Cuesta lo mismo con 6 que con 15 diapositivas.</span></div>
     <div class="op" aria-hidden="true">+</div>
-    <div class="t"><b>$1.500</b><span><strong>Por cada diapositiva.</strong> Lo único que cambia el precio es el tamaño de la exposición.</span></div>
+    <div class="t"><b>$1.200</b><span><strong>Por cada diapositiva.</strong> Lo único que cambia el precio es el tamaño de la exposición.</span></div>
     <div class="op" aria-hidden="true">=</div>
-    <div class="t res"><b>Tu precio</b><span>Por ejemplo, 10 diapositivas: 6.000 + 15.000 = <strong>$21.000</strong> el grupo.</span></div>
+    <div class="t res"><b>Tu precio</b><span>Por ejemplo, 10 diapositivas: 5.500 + 12.000 = <strong>$17.500</strong> el grupo.</span></div>
   </div>
   <div class="ejemplo">
     <div class="card">
       <h3>Ejemplo paso a paso</h3>
       <p class="muted" style="margin:4px 0 14px">Grupo de 4 personas, exposición de 10 diapositivas, para dentro de una semana.</p>
       <ol class="pasos">
-        <li><span>Se pone la base: <b>$6.000</b>.</span></li>
-        <li><span>Se suman las diapositivas: 10 × 1.500 = <b>$15.000</b>.</span></li>
-        <li><span>Total del grupo: 6.000 + 15.000 = <b>$21.000</b>.</span></li>
-        <li><span>Entre los 4 sale a <b>$5.250</b> por persona.</span></li>
-        <li><span>Para empezar se paga la mitad: <b>$10.500</b>. El resto, cuando ves el trabajo.</span></li>
+        <li><span>Se pone la base: <b>$5.500</b>.</span></li>
+        <li><span>Se suman las diapositivas: 10 × 1.200 = <b>$12.000</b>.</span></li>
+        <li><span>Total del grupo: 5.500 + 12.000 = <b>$17.500</b>.</span></li>
+        <li><span>Entre los 4 sale a unos <b>$4.400</b> por persona.</span></li>
+        <li><span>Para empezar se paga la mitad: <b>$8.800</b>. El resto, cuando ves el trabajo.</span></li>
       </ol>
     </div>
     <div class="card" style="display:flex;flex-direction:column;gap:12px">
       <h3>¿Y si son más de 4?</h3>
-      <p class="muted">Cada integrante después del cuarto suma <b>$1.000</b>, porque son más partes del guion que preparar. Un grupo de 6 con 10 diapositivas: 21.000 + 2.000 = <b>$23.000</b>.</p>
+      <p class="muted">Cada integrante después del cuarto suma <b>$1.000</b>, porque son más partes del guion que preparar. Un grupo de 6 con 10 diapositivas: 17.500 + 2.000 = <b>$19.500</b>.</p>
       <h3>¿Y si es para mañana?</h3>
       <p class="muted">Lo urgente cuesta más porque hay que dejar todo lo demás. Mira la tabla de <a href="#urgencia">urgencia</a>.</p>
       <p class="nota"><b>Tip:</b> pedir con tiempo te sale más barato y el trabajo queda mejor.</p>
@@ -340,7 +340,7 @@ details[open] p{animation:sube .3s ease}
     <div class="card"><h3>Lo único que cambia el precio</h3><ul>
       <li>El número de diapositivas, páginas, guías o mapas.</li>
       <li>Más de 4 integrantes en la Expo lista: $1.000 por cada uno desde el quinto.</li>
-      <li>Sumar una guía de estudio a tus diapositivas: $7.000.</li>
+      <li>Sumar una guía de estudio a tus diapositivas: $6.000.</li>
       <li>La <a href="#urgencia">urgencia</a>: +30 % o +50 % si lo necesitas en menos de 48 o 24 horas.</li>
       <li>«Otro trabajo» (algo que no está en la lista): te lo cotizo por correo.</li>
     </ul></div>
@@ -352,8 +352,8 @@ details[open] p{animation:sube .3s ease}
     <p class="muted">Se cuenta desde que llega el anticipo hasta la hora en que necesitas el trabajo.</p></div>
   <div class="urg">
     <div><b>Precio normal</b><span class="muted">3 días o más</span></div>
-    <div><b>+30 %</b><span class="muted">Menos de 48 horas. 21.000 pasa a 27.500.</span></div>
-    <div><b>+50 %</b><span class="muted">Menos de 24 horas. 21.000 pasa a 31.500.</span></div>
+    <div><b>+30 %</b><span class="muted">Menos de 48 horas. 17.500 pasa a 23.000.</span></div>
+    <div><b>+50 %</b><span class="muted">Menos de 24 horas. 17.500 pasa a 26.500.</span></div>
   </div>
 </section>
 
@@ -502,28 +502,28 @@ const dur = n => n === 1 ? '30 min' : (n % 2 ? `${(n - 1) / 2} h 30 min` : `${n 
 const SRV = {
   expo: {nombre: 'Expo lista', top: true, ejs: [8, 10, 12], unidad: 'Diapositivas', def: 10, grupo: true,
     txt: 'Diapositivas, guion para cada integrante y las preguntas probables del profe.',
-    formula: 'Base de $6.000 más $1.500 por cada diapositiva.', ej: '10 diapositivas',
-    lineas: n => [['Base: tema, guion y preguntas', 6000], [`${n} ${pl(n, 'diapositiva', 'diapositivas')} × 1.500`, 1500 * n]]},
+    formula: 'Base de $5.500 más $1.200 por cada diapositiva.', ej: '10 diapositivas',
+    lineas: n => [['Base: tema, guion y preguntas', 5500], [`${n} ${pl(n, 'diapositiva', 'diapositivas')} × 1.200`, 1200 * n]]},
   diap: {nombre: 'Solo diapositivas', ejs: [8, 10, 12], unidad: 'Diapositivas', def: 10, grupo: true,
     txt: 'Las diapositivas bien hechas, sin guion ni preguntas.',
-    formula: 'Base de $3.000 más $1.500 por cada diapositiva.', ej: '10 diapositivas',
-    lineas: n => [['Base: estructura y diseño', 3000], [`${n} ${pl(n, 'diapositiva', 'diapositivas')} × 1.500`, 1500 * n]]},
+    formula: 'Base de $2.500 más $1.200 por cada diapositiva.', ej: '10 diapositivas',
+    lineas: n => [['Base: estructura y diseño', 2500], [`${n} ${pl(n, 'diapositiva', 'diapositivas')} × 1.200`, 1200 * n]]},
   guia: {nombre: 'Guía de estudio', ejs: [1, 2], unidad: 'Guías', def: 1, grupo: true,
     txt: 'Resumen del tema con preguntas de práctica para el parcial.',
-    formula: '$7.000 por cada guía.', ej: '1 guía',
-    lineas: n => [[`${n} ${pl(n, 'guía', 'guías')} × 7.000`, 7000 * n]]},
+    formula: '$6.000 por cada guía.', ej: '1 guía',
+    lineas: n => [[`${n} ${pl(n, 'guía', 'guías')} × 6.000`, 6000 * n]]},
   apa: {nombre: 'Revisión APA y redacción', ejs: [5, 8, 12], unidad: 'Páginas', def: 8, grupo: false,
     txt: 'Reviso normas APA, citas, ortografía y redacción de un trabajo ya hecho.',
-    formula: '$5.000 hasta 5 páginas. Cada página más, $1.000.', ej: '8 páginas',
-    lineas: n => [['Hasta 5 páginas', 5000]].concat(n > 5 ? [[`${n - 5} ${pl(n - 5, 'página extra', 'páginas extra')} × 1.000`, 1000 * (n - 5)]] : [])},
+    formula: '$4.500 hasta 5 páginas. Cada página más, $900.', ej: '8 páginas',
+    lineas: n => [['Hasta 5 páginas', 4500]].concat(n > 5 ? [[`${n - 5} ${pl(n - 5, 'página extra', 'páginas extra')} × 900`, 900 * (n - 5)]] : [])},
   mapa: {nombre: 'Mapa conceptual o cuadro', ejs: [1, 2], unidad: 'Mapas o cuadros', def: 1, grupo: false,
     txt: 'Mapa conceptual, cuadro comparativo o sinóptico.',
-    formula: '$8.000 por cada mapa o cuadro.', ej: '1 mapa',
-    lineas: n => [[`${n} × 8.000`, 8000 * n]]},
+    formula: '$7.000 por cada mapa o cuadro.', ej: '1 mapa',
+    lineas: n => [[`${n} × 7.000`, 7000 * n]]},
   inf: {nombre: 'Informe o ensayo guía', ejs: [3, 5], unidad: 'Páginas', def: 5, grupo: false,
     txt: 'Un borrador guía para que tú lo trabajes y lo hagas tuyo.',
-    formula: 'Base de $4.000 más $3.000 por página.', ej: '5 páginas',
-    lineas: n => [['Base', 4000], [`${n} ${pl(n, 'página', 'páginas')} × 3.000`, 3000 * n]]},
+    formula: 'Base de $3.500 más $2.800 por página.', ej: '5 páginas',
+    lineas: n => [['Base', 3500], [`${n} ${pl(n, 'página', 'páginas')} × 2.800`, 2800 * n]]},
 };
 function cotizar(s, n, integ, u) {
   const d = SRV[s], L = d.lineas(n);

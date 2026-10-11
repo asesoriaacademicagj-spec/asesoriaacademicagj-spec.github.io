@@ -179,7 +179,7 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
   <h1>Tu exposición, lista para <em>defenderla</em></h1>
   <p>Diapositivas hechas para tu tema, con guion para quien expone y las preguntas que puede hacer el profe. Una sola persona llena el formulario por todo el grupo.</p>
   <ul class="incluye"><li>Diapositivas</li><li>Guion para exponer</li><li>Guía de estudio</li></ul>
-  <div class="cta-row"><a class="btn cta" href="#form">Pedir cotización</a><p class="desde"><b>Desde $7.500:</b> $6.000 de base + $1.500 por diapositiva. El precio no cambia por imágenes, gráficas ni extras. Guías, revisión APA, mapas e informes tienen su precio en la lista.</p><small>Te respondo por correo en menos de 24 h, sin compromiso. <a href="precios.html" class="ver-precios">Ver precios</a></small></div>
+  <div class="cta-row"><a class="btn cta" href="#form">Pedir cotización</a><p class="desde"><b>Desde $7.000:</b> $5.500 de base + $1.200 por diapositiva. El precio no cambia por imágenes, gráficas ni extras. Guías, revisión APA, mapas e informes tienen su precio en la lista.</p><small>Te respondo por correo en menos de 24 h, sin compromiso. <a href="precios.html" class="ver-precios">Ver precios</a></small></div>
 </header>
 <ol class="pasos" aria-label="Cómo funciona">
   <li><b>Llenas el formulario</b>Unos 5 minutos, una persona por grupo.</li>
@@ -335,7 +335,7 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
     </div></div>
   <div class="f" data-dia><span class="lbl" id="extrasL">¿Quieres algún extra? <span class="opt">(opcional)</span></span>
   <div class="choices" aria-labelledby="extrasL">
-    <label class="choice"><input type="checkbox" id="guia"><span>Guía de estudio para el grupo<small>Resumen y posibles preguntas del profe. Suma $7.000 (precio de una guía).</small></span></label>
+    <label class="choice"><input type="checkbox" id="guia"><span>Guía de estudio para el grupo<small>Resumen y posibles preguntas del profe. Suma $6.000 (precio de una guía).</small></span></label>
     <label class="choice"><input type="checkbox" id="paneles"><span>Paneles interactivos<small>Deslizador o lienzo en las diapositivas. Va incluido en el precio.</small></span></label>
   </div></div>
   <div class="f"><label for="obs">Algo más <span class="opt">(opcional)</span></label><textarea id="obs" placeholder="Colores, estilo, cosas que el profe no quiere ver, enlaces de referencia…"></textarea></div>
@@ -470,14 +470,14 @@ function addMember(v=''){
 }
 $('#addMember').onclick=()=>{addMember().focus(); save();};
 
-const cop=n=>'$'+n.toLocaleString('es-CO'), GUIA=7000, EXTRA_INT=1000;
+const cop=n=>'$'+n.toLocaleString('es-CO'), GUIA=6000, EXTRA_INT=1000;
 const SRV={
-  'Expo lista':{dia:1,grupo:1,p:n=>6000+1500*n,det:n=>`${cop(6000)} de base + ${n} × ${cop(1500)}`},
-  'Solo diapositivas':{dia:1,grupo:1,p:n=>3000+1500*n,det:n=>`${cop(3000)} de base + ${n} × ${cop(1500)}`},
-  'Guía de estudio':{cuenta:'Nº de guías',p:n=>7000*n,det:n=>`${n} × ${cop(7000)}`},
-  'Revisión APA y redacción':{cuenta:'Nº de páginas del trabajo',p:n=>5000+Math.max(0,n-5)*1000,det:n=>n>5?`${cop(5000)} hasta 5 páginas + ${n-5} × ${cop(1000)}`:`${cop(5000)} hasta 5 páginas`},
-  'Mapa conceptual o cuadro':{cuenta:'Nº de mapas o cuadros',p:n=>8000*n,det:n=>`${n} × ${cop(8000)}`},
-  'Informe o ensayo guía':{cuenta:'Nº de páginas',p:n=>4000+3000*n,det:n=>`${cop(4000)} de base + ${n} × ${cop(3000)}`},
+  'Expo lista':{dia:1,grupo:1,p:n=>5500+1200*n,det:n=>`${cop(5500)} de base + ${n} × ${cop(1200)}`},
+  'Solo diapositivas':{dia:1,grupo:1,p:n=>2500+1200*n,det:n=>`${cop(2500)} de base + ${n} × ${cop(1200)}`},
+  'Guía de estudio':{cuenta:'Nº de guías',p:n=>6000*n,det:n=>`${n} × ${cop(6000)}`},
+  'Revisión APA y redacción':{cuenta:'Nº de páginas del trabajo',p:n=>4500+Math.max(0,n-5)*900,det:n=>n>5?`${cop(4500)} hasta 5 páginas + ${n-5} × ${cop(900)}`:`${cop(4500)} hasta 5 páginas`},
+  'Mapa conceptual o cuadro':{cuenta:'Nº de mapas o cuadros',p:n=>7000*n,det:n=>`${n} × ${cop(7000)}`},
+  'Informe o ensayo guía':{cuenta:'Nº de páginas',p:n=>3500+2800*n,det:n=>`${cop(3500)} de base + ${n} × ${cop(2800)}`},
   'Otro trabajo':{}
 };
 const T=()=>SRV[radio('tipo')]||SRV['Expo lista'];
@@ -496,7 +496,7 @@ function precioMin(){
   let p=t.p(n), d=t.det(n), k=nombres().length;
   if(t.grupo&&k>4){ p+=EXTRA_INT*(k-4); d+=` + ${k-4} × ${cop(EXTRA_INT)} por integrante después del cuarto`; }
   if(t.dia&&$('#guia').checked){ p+=GUIA; d+=` + ${cop(GUIA)} de la guía de estudio`; }
-  return [n,p,d];
+  return [n,Math.ceil(p/500)*500,d];   // el total se redondea a los 500 de arriba
 }
 function toggles(){
   { const [n,p,d]=precioMin(), el=$('#precio'); el.hidden=!n; el.innerHTML=n?`Precio de lista: <b>${cop(p)} COP</b> (${d}). Para empezar pagas la mitad: <b>${cop(Math.ceil(p/200)*100)}</b>. Cuesta lo mismo con o sin imágenes, gráficas o animaciones; solo sube si lo necesitas con urgencia. El valor final te lo confirmamos por correo.`:''; }
