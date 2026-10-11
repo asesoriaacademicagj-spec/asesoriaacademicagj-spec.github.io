@@ -154,6 +154,15 @@ summary::-webkit-details-marker{display:none}
 summary::after{content:"+";font:800 22px/1 var(--display);color:var(--sea)}
 details[open] summary::after{content:"−"}
 details p{padding-bottom:16px;color:var(--muted);max-width:70ch}
+.dudas-grupos{display:flex;flex-direction:column;gap:22px}
+.dudas-tema{font:700 14px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+details[open]{border-color:var(--sea)}
+details:target{border-color:var(--sun)}
+details p b{color:var(--ink)}
+summary{min-height:48px;align-items:center}
+summary::after{flex:none}
+summary:focus-visible{outline-offset:-3px;border-radius:14px}
+.dudas-fin{font-size:16px;margin-top:18px}
 
 /* Escríbenos */
 .buzon{display:grid;grid-template-columns:1fr 1.3fr;gap:24px;align-items:start}
@@ -401,13 +410,23 @@ details[open] p{animation:sube .3s ease}
 
 <section id="dudas">
   <div class="cab"><span class="paso-n">8 · Preguntas</span><h2>Dudas frecuentes</h2></div>
-  <div>
-    <details><summary>¿Por qué hay una base y no solo un precio por diapositiva?</summary><p>Porque lo que más tiempo lleva no son las diapositivas, sino entender tu tema, ordenar lo que va a decir cada uno y pensar qué te puede preguntar el profe. Eso cuesta lo mismo con pocas o muchas diapositivas.</p></details>
-    <details><summary>¿Se paga por persona?</summary><p>No. Se paga por grupo y una sola persona hace el pago. Ustedes se reparten como quieran; la calculadora te muestra cuánto sale por cabeza.</p></details>
-    <details><summary>¿Y si no me gusta cómo quedó?</summary><p>Antes de pagar el resto ves una vista previa. Ahí me dices qué cambiar y lo corrijo una vez sin costo. Si algo sigue mal, escribe en el buzón de abajo.</p></details>
-    <details><summary>¿El profe va a notar que no la hice yo?</summary><p>La exposición va hecha para que la entiendas y la puedas defender: con guion en palabras sencillas y las preguntas probables. Es única, no se repite entre grupos. La exposición la presentas tú. Y ojo: los detectores de IA se equivocan seguido; mira <a href="#detectores">los ejemplos</a>.</p></details>
-    <details><summary>¿Cómo pago?</summary><p>Por Nequi, con QR o número. Los dos te llegan solo en el correo de confirmación, junto con el valor de la mitad. Si alguien te pide pagar a otro número o por otro medio, no es de aquí.</p></details>
+  <div class="dudas-grupos">
+    <div class="dudas-grupo" role="group" aria-labelledby="dg-pagar">
+      <h3 class="dudas-tema" id="dg-pagar">Precio y pago</h3>
+      <details id="dudas-base"><summary>¿Por qué hay una base y no solo un precio por diapositiva?</summary><p>Porque lo que más tiempo lleva no son las diapositivas, sino entender tu tema, ordenar lo que va a decir cada uno y pensar qué te puede preguntar el profe. Eso cuesta lo mismo con pocas o muchas diapositivas.</p></details>
+      <details id="dudas-persona"><summary>¿Se paga por persona?</summary><p><b>No.</b> Se paga por grupo y una sola persona hace el pago. Ustedes se reparten como quieran; la calculadora te muestra cuánto sale por cabeza.</p></details>
+      <details id="dudas-pago"><summary>¿Cómo pago?</summary><p><b>Por Nequi</b>, con QR o número. Los dos te llegan solo en el correo de confirmación, junto con el valor de la mitad.</p><p>Si alguien te pide pagar a otro número o por otro medio, no es de aquí. <a href="#pago">Mira los 4 pasos</a></p></details>
+    </div>
+    <div class="dudas-grupo" role="group" aria-labelledby="dg-entrega">
+      <h3 class="dudas-tema" id="dg-entrega">Entrega y cambios</h3>
+      <details id="dudas-cambios"><summary>¿Y si no me gusta cómo quedó?</summary><p>Antes de pagar el resto ves una vista previa. Ahí me dices qué cambiar y <b>lo corrijo una vez sin costo</b>. Si algo sigue mal, escribe en <a href="#escribenos">el buzón de abajo</a>.</p></details>
+    </div>
+    <div class="dudas-grupo" role="group" aria-labelledby="dg-confianza">
+      <h3 class="dudas-tema" id="dg-confianza">Confianza</h3>
+      <details id="dudas-profe"><summary>¿El profe va a notar que no la hice yo?</summary><p>La exposición va hecha para que la entiendas y la puedas defender: con guion en palabras sencillas y las preguntas probables. <b>Es única, no se repite entre grupos.</b> La exposición la presentas tú. Y ojo: los detectores de IA se equivocan seguido; mira <a href="#detectores">los ejemplos</a>.</p></details>
+    </div>
   </div>
+  <p class="muted dudas-fin">¿No encontraste la tuya? <a href="#escribenos">Escríbela en el buzón</a>.</p>
 </section>
 
 <section id="escribenos">
@@ -633,6 +652,20 @@ $('fCom').addEventListener('submit', async ev => {
   const tot = document.querySelector('.total b');
   if (tot) new MutationObserver(() => { tot.classList.remove('late'); void tot.offsetWidth; tot.classList.add('late'); })
     .observe(tot, { childList: true, characterData: true, subtree: true });
+})();
+
+// Dudas: abre y muestra la pregunta enlazada por hash (#dudas-...)
+(() => {
+  const abre = () => {
+    let id; try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) { return; }
+    if (!id.startsWith('dudas-')) return;
+    const d = document.getElementById(id);
+    if (!d || d.tagName !== 'DETAILS') return;
+    d.open = true; d.classList.add('vis');
+    d.scrollIntoView({ block: 'start' });
+  };
+  abre();
+  addEventListener('hashchange', abre);
 })();
 </script>
 </body>
