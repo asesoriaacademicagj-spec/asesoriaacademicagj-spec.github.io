@@ -179,7 +179,7 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
   <h1>Tu exposición, lista para <em>defenderla</em></h1>
   <p>Diapositivas hechas para tu tema, con guion para quien expone y las preguntas que puede hacer el profe. Una sola persona llena el formulario por todo el grupo.</p>
   <ul class="incluye"><li>Diapositivas</li><li>Guion para exponer</li><li>Guía de estudio</li></ul>
-  <div class="cta-row"><a class="btn cta" href="#form">Pedir cotización</a><p class="desde"><b>Desde $6.000:</b> $5.000 de base + $1.000 por diapositiva.</p><small>Te respondo por correo en menos de 24 h, sin compromiso. <a href="precios.html" class="ver-precios">Ver precios</a></small></div>
+  <div class="cta-row"><a class="btn cta" href="#form">Pedir cotización</a><p class="desde"><b>Desde $6.000:</b> $5.000 de base + $1.000 por diapositiva. Otros trabajos se cotizan por correo.</p><small>Te respondo por correo en menos de 24 h, sin compromiso. <a href="precios.html" class="ver-precios">Ver precios</a></small></div>
 </header>
 <ol class="pasos" aria-label="Cómo funciona">
   <li><b>Llenas el formulario</b>Unos 5 minutos, una persona por grupo.</li>
@@ -232,7 +232,12 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
 
 <fieldset>
   <legend><b>3</b>El encargo</legend>
-  <div class="f"><label for="tema">Tema de la exposición</label><input id="tema" type="text" required placeholder="Ej.: Integración por partes"></div>
+  <div class="f"><span class="lbl" id="tipoL">¿Qué necesitas?</span>
+    <div class="choices" role="radiogroup" aria-labelledby="tipoL">
+      <label class="choice"><input type="radio" name="tipo" id="tipo-dia" value="Diapositivas" checked><span>Diapositivas<small>Precio de lista por número de diapositivas.</small></span></label>
+      <label class="choice"><input type="radio" name="tipo" id="tipo-otro" value="Otro trabajo"><span>Otro trabajo<small>Que no sean diapositivas. Te lo cotizo por correo según lo que pidas.</small></span></label>
+    </div></div>
+  <div class="f"><label for="tema" data-otro="Tema del trabajo">Tema de la exposición</label><input id="tema" type="text" required placeholder="Ej.: Integración por partes"></div>
   <div class="f"><label for="pide">¿Qué pide el profe?</label>
     <textarea id="pide" required placeholder="Puntos que debe tener, cómo se califica, ejemplos que exige, lo que haya dicho en clase…"></textarea>
 </div>
@@ -241,12 +246,12 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
     <p class="hint">Fotos, PDF, Word o PowerPoint. Hasta 5 archivos y 10 MB en total. Si tienen plantilla propia, súbanla aquí.</p>
     <ul class="files" id="fileList"></ul>
     <p class="err" id="fileErr" hidden></p></div>
-  <div class="row">
+  <div class="row" data-dia>
     <div class="f"><label for="cantidad">Nº de diapositivas</label><input id="cantidad" type="number" min="1" max="80" inputmode="numeric" required placeholder="Ej.: 12"><p class="hint">Si no sabes, pon un estimado.</p><p class="hint" id="precio" hidden></p></div>
     <div class="f"><label for="minutos">Duración de la exposición <span class="opt">(min, opcional)</span></label><input id="minutos" type="number" min="1" max="240" inputmode="numeric"></div>
   </div>
   <div class="row">
-    <div class="f"><label for="fecha">¿Cuándo las necesitas?</label><input id="fecha" type="date" required><p class="hint" id="fechaTip"></p></div>
+    <div class="f"><label for="fecha" data-otro="¿Cuándo lo necesitas?">¿Cuándo las necesitas?</label><input id="fecha" type="date" required><p class="hint" id="fechaTip"></p></div>
     <div class="f"><label for="hora">Hora <span class="opt">(opcional)</span></label><input id="hora" type="time"></div>
   </div>
   <div class="f"><span class="lbl" id="contenidoL">El contenido</span>
@@ -258,8 +263,8 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
 </fieldset>
 
 <fieldset>
-  <legend><b>4</b>La exposición</legend>
-  <div class="f"><span class="lbl" id="modoL">¿Cómo van a exponer?</span>
+  <legend><b>4</b><span data-otro="El grupo">La exposición</span></legend>
+  <div class="f" data-dia><span class="lbl" id="modoL">¿Cómo van a exponer?</span>
     <div class="choices" role="radiogroup" aria-labelledby="modoL" data-req="modo">
       <label class="choice"><input type="radio" name="modo" id="modo-libre" value="Todos, en el orden que el grupo quiera"><span>Todos, en el orden que el grupo quiera</span></label>
       <label class="choice"><input type="radio" name="modo" id="modo-profe" value="El profe elige quién expone cada parte"><span>El profe elige quién expone cada parte</span></label>
@@ -277,7 +282,7 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
 
 <fieldset>
   <legend><b>5</b>Extras</legend>
-  <div class="choices">
+  <div class="choices" data-dia>
     <label class="choice"><input type="checkbox" id="guion"><span>Guion o notas del orador<small>Qué decir en cada diapositiva.</small></span></label>
     <label class="choice"><input type="checkbox" id="guia"><span>Guía de estudio para el grupo<small>Resumen y posibles preguntas del profe.</small></span></label>
     <label class="choice"><input type="checkbox" id="paneles"><span>Paneles interactivos<small>Deslizador o lienzo en las diapositivas. Es un extra: se cotiza aparte.</small></span></label>
@@ -285,7 +290,7 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
   <div class="f"><label for="obs">Algo más <span class="opt">(opcional)</span></label><textarea id="obs" placeholder="Colores, estilo, cosas que el profe no quiere ver, enlaces de referencia…"></textarea></div>
 </fieldset>
 
-<fieldset>
+<fieldset data-dia>
   <legend><b>6</b>Plantilla</legend>
   <p class="hint" style="margin:0">Las tres plantillas de la universidad cambian solo la portada; las diapositivas internas son iguales.</p>
   <div class="tpl" role="radiogroup" aria-label="Plantilla" data-req="plantilla">
@@ -302,7 +307,7 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
   <div class="f"><label for="nequi">Número Nequi desde el que pagarás</label>
     <input id="nequi" type="tel" inputmode="numeric" required placeholder="3xx xxx xxxx" pattern="3\d{9}">
     <p class="hint">Sirve para reconocer tus pagos. El precio te llega por correo antes de empezar.</p></div>
-  <label class="choice"><input type="checkbox" id="acepto" required><span>Entiendo que el precio se confirma por correo, que el trabajo empieza cuando llegue el anticipo del 50 % y que el otro 50 % se paga al ver las diapositivas terminadas, antes de recibir los archivos.</span></label>
+  <label class="choice"><input type="checkbox" id="acepto" required><span data-sw>Entiendo que el precio se confirma por correo, que el trabajo empieza cuando llegue el anticipo del 50 % y que el otro 50 % se paga al ver las diapositivas terminadas, antes de recibir los archivos.</span></label>
 </fieldset>
 
 <div class="actions">
@@ -322,7 +327,7 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
   <details><summary class="noprint">Ver lo que enviaste</summary><pre id="resumen"></pre></details>
   <div id="pago">
     <h2>Pago por Nequi: 50 % y 50 %</h2>
-    <p class="hint" style="margin:0">Para empezar pagas solo la mitad (anticipo), cuando te haya confirmado el precio por correo. La otra mitad la pagas cuando te muestre las diapositivas terminadas; con ese pago te envío los archivos.</p>
+    <p class="hint" style="margin:0" data-sw>Para empezar pagas solo la mitad (anticipo), cuando te haya confirmado el precio por correo. La otra mitad la pagas cuando te muestre las diapositivas terminadas; con ese pago te envío los archivos.</p>
     <p style="margin:0"><b>El QR y el número Nequi te llegan solo por correo</b>, junto con el precio confirmado. Si alguien te pide pagar a otro número o por otro medio, no es de aquí.</p>
       </div>
 </section>
@@ -403,7 +408,8 @@ function addMember(v=''){
 $('#addMember').onclick=()=>{addMember().focus(); save();};
 
 const BASE=5000, PRECIO=1000, cop=n=>'$'+n.toLocaleString('es-CO');
-function precioMin(){ const n=Math.max(0,Math.floor(+val('cantidad')||0)); return [n, n?BASE+n*PRECIO:0]; }
+const esOtro=()=>$('#tipo-otro').checked;
+function precioMin(){ if(esOtro()) return [0,0]; const n=Math.max(0,Math.floor(+val('cantidad')||0)); return [n, n?BASE+n*PRECIO:0]; }
 function toggles(){
   { const [n,p]=precioMin(), el=$('#precio'); el.hidden=!n; el.innerHTML=n?`Precio de lista: <b>${cop(p)} COP</b> (${cop(BASE)} de base + ${n} × ${cop(PRECIO)}). Para empezar pagas la mitad: <b>${cop(Math.ceil(p/200)*100)}</b>. El valor final te lo confirmamos por correo según contenido, urgencia y extras.`:''; }
   $('#programaOtro').hidden=$('#programa').value!=='otro';
@@ -411,6 +417,12 @@ function toggles(){
   const m=(form.querySelector('[name=modo]:checked')||{}).id||'';
   $('#algunosBox').hidden=m!=='modo-algunos';
   $('#todosNote').hidden=!m||m==='modo-libre';
+  const otro=esOtro();
+  $$('[data-dia]').forEach(e=>e.hidden=otro);
+  if(otro){ $('#algunosBox').hidden=true; $('#todosNote').hidden=true; }
+  $$('[data-otro]').forEach(e=>{ if(e.dataset.dia0===undefined) e.dataset.dia0=e.textContent; e.textContent=otro?e.dataset.otro:e.dataset.dia0; });
+  $$('[data-sw]').forEach(e=>{ if(e.dataset.dia0===undefined) e.dataset.dia0=e.textContent; e.textContent=otro?e.dataset.dia0.replace('las diapositivas terminadas','el trabajo terminado'):e.dataset.dia0; });
+  pasos.filter(f=>!f.hidden).forEach((f,i)=>{ f.querySelector('legend b').textContent=i+1; });
 }
 
 function save(){
@@ -434,6 +446,7 @@ function validate(){
   $$('.invalid').forEach(e=>e.classList.remove('invalid'));
   const bad=[];
   $$('#form [required]').forEach(el=>{
+    if(el.closest('[hidden]')) return;
     let ok = el.type==='checkbox' ? el.checked : el.value.trim()!=='';
     if(ok && el.id==='nequi') ok=/^3\d{9}$/.test(el.value.replace(/\D/g,''));
     if(ok && el.id==='cantidad') ok=+el.value>=1;
@@ -442,7 +455,7 @@ function validate(){
   });
   if($('#programa').value==='otro' && !val('programaOtro')){ $('#programaOtro').classList.add('invalid'); bad.push($('#programaOtro')); }
   if($('#sede').value==='otra' && !val('sedeOtra')){ $('#sedeOtra').classList.add('invalid'); bad.push($('#sedeOtra')); }
-  $$('[data-req]').forEach(g=>{ if(!radio(g.dataset.req)){ g.querySelectorAll('.choice').forEach(c=>c.classList.add('invalid')); bad.push(g.querySelector('input')); }});
+  $$('[data-req]').forEach(g=>{ if(g.closest('[hidden]')) return; if(!radio(g.dataset.req)){ g.querySelectorAll('.choice').forEach(c=>c.classList.add('invalid')); bad.push(g.querySelector('input')); }});
   const names=$$('.mi').map(i=>i.value.trim()).filter(Boolean);
   $('#membersErr').hidden=names.length>0; if(!names.length){ $$('.mi').forEach(i=>i.classList.add('invalid')); bad.push($('.mi')); }
   if(fileProblem()){ $('#adjuntos').classList.add('invalid'); bad.push($('#adjuntos')); }
@@ -456,15 +469,16 @@ function texto(){
   const names=$$('.mi').map(i=>i.value.trim()).filter(Boolean);
   const extras=[$('#guion').checked&&'Guion o notas del orador',$('#guia').checked&&'Guía de estudio',$('#paneles').checked&&'Paneles interactivos'].filter(Boolean);
   let modo=radio('modo'); if($('#modo-algunos').checked&&val('exponen')) modo+=` (${val('exponen')} de ${names.length})`;
+  const otro=esOtro();
   const L=[
-    'ENCARGO DE DIAPOSITIVAS','',
+    otro?'ENCARGO DE OTRO TRABAJO (NO SON DIAPOSITIVAS)':'ENCARGO DE DIAPOSITIVAS','',
     '— Datos —',`Nombre: ${val('nombre')}`,`Correo: ${val('correo')}`,
     `Programa: ${prog}`,`Sede: ${sede}`,`Semestre: ${val('semestre')}`,`Asignatura: ${val('asignatura')}`, val('docente')&&`Docente: ${val('docente')}`,'',
-    '— Encargo —',`Tema: ${val('tema')}`,`Diapositivas: ${val('cantidad')}`, val('minutos')&&`Duración de la exposición: ${val('minutos')} min`,
+    '— Encargo —',`Tema: ${val('tema')}`, !otro&&`Diapositivas: ${val('cantidad')}`, !otro&&val('minutos')&&`Duración de la exposición: ${val('minutos')} min`,
     `Entrega: ${fmtFecha(val('fecha'))}${val('hora')?' a las '+val('hora'):''}`,`Contenido: ${radio('contenido')}`,'','Lo que pide el profe:',val('pide'),'',
-    '— Exposición —',`Modalidad: ${modo}`,`Integrantes (${names.length}):`,...names.map((n,i)=>`  ${i+1}. ${n}`),'',
-    '— Extras —',`Adicionales: ${extras.length?extras.join(', '):'Ninguno'}`,`Plantilla: ${radio('plantilla')}`, val('obs')&&`Observaciones: ${val('obs')}`,'',
-    '— Pago —',`Precio base: ${cop(precioMin()[1])} COP (${precioMin()[0]} × ${cop(PRECIO)}; el valor final se confirma por correo)`,`Anticipo para empezar (50 %): ${cop(Math.ceil(precioMin()[1]/200)*100)} COP; el otro 50 % al ver las diapositivas terminadas`,`Nequi del que paga: ${val('nequi').replace(/\D/g,'')}`,
+    otro?'— Grupo —':'— Exposición —',!otro&&`Modalidad: ${modo}`,`Integrantes (${names.length}):`,...names.map((n,i)=>`  ${i+1}. ${n}`),'',
+    otro?'— Observaciones —':'— Extras —',!otro&&`Adicionales: ${extras.length?extras.join(', '):'Ninguno'}`,!otro&&`Plantilla: ${radio('plantilla')}`, val('obs')&&`Observaciones: ${val('obs')}`,'',
+    '— Pago —',...(otro?['Precio: se cotiza por correo (no son diapositivas, no hay precio de lista)','Anticipo para empezar (50 %): se indica con el precio; el otro 50 % al ver el trabajo terminado']:[`Precio base: ${cop(precioMin()[1])} COP (${precioMin()[0]} × ${cop(PRECIO)}; el valor final se confirma por correo)`,`Anticipo para empezar (50 %): ${cop(Math.ceil(precioMin()[1]/200)*100)} COP; el otro 50 % al ver las diapositivas terminadas`]),`Nequi del que paga: ${val('nequi').replace(/\D/g,'')}`,
     ...(files().length?['','— Adjuntos —',...files().map(f=>`${f.name} (${kb(f.size)})`)]:[]),
   ];
   return L.filter(x=>x!==false&&x!=='').join('\n').replace(/\n(— )/g,'\n\n$1');
@@ -491,13 +505,13 @@ async function enviar(){
   try{
     const prog=$('#programa').value==='otro'?val('programaOtro'):val('programa');
     const sede=$('#sede').value==='otra'?val('sedeOtra'):val('sede');
-    const names=$$('.mi').map(i=>i.value.trim()).filter(Boolean);
+    const names=$$('.mi').map(i=>i.value.trim()).filter(Boolean), otro=esOtro();
     const payload={
       web:val('web'), texto:current, nombre:val('nombre'), correo:val('correo'), celular:'',
       programa:prog, sede, semestre:val('semestre'), asignatura:val('asignatura'), docente:val('docente'), tema:val('tema'),
-      cantidad:val('cantidad'), minutos:val('minutos'), entrega:`${val('fecha')} ${val('hora')}`.trim(), contenido:radio('contenido'), pide:val('pide'),
-      modo:radio('modo')+($('#modo-algunos').checked&&val('exponen')?` (${val('exponen')} de ${names.length})`:''), integrantes:names,
-      extras:[$('#guion').checked&&'Guion',$('#guia').checked&&'Guía de estudio',$('#paneles').checked&&'Paneles interactivos'].filter(Boolean), plantilla:radio('plantilla'), obs:val('obs'),
+      cantidad:otro?'':val('cantidad'), minutos:otro?'':val('minutos'), entrega:`${val('fecha')} ${val('hora')}`.trim(), contenido:radio('contenido'), pide:val('pide'),
+      modo:otro?'':radio('modo')+($('#modo-algunos').checked&&val('exponen')?` (${val('exponen')} de ${names.length})`:''), integrantes:names,
+      extras:otro?[]:[$('#guion').checked&&'Guion',$('#guia').checked&&'Guía de estudio',$('#paneles').checked&&'Paneles interactivos'].filter(Boolean), plantilla:otro?'':radio('plantilla'), obs:(otro?'[OTRO TRABAJO, no son diapositivas] ':'')+val('obs'), tipo:radio('tipo'),
       nequi:val('nequi').replace(/\D/g,''),
       files:await Promise.all(files().map(async f=>({name:f.name,type:f.type,b64:await b64(f)})))
     };
@@ -538,7 +552,7 @@ function avance(){
   let tot=0, ok=0;
   form.querySelectorAll('[required]').forEach(e=>{ if(e.id==='web'||e.closest('[hidden]')||(e.offsetParent===null&&e.type!=='checkbox')) return;
     tot++; if(e.type==='checkbox'?e.checked:(e.value.trim()&&e.checkValidity())) ok++; });
-  $$('[data-req]').forEach(g=>{ tot++; if(radio(g.dataset.req)) ok++; });
+  $$('[data-req]').forEach(g=>{ if(g.closest('[hidden]')) return; tot++; if(radio(g.dataset.req)) ok++; });
   const pct=tot?Math.round(ok/tot*100):0;
   $('#avBarra').style.width=pct+'%'; $('.barra').setAttribute('aria-valuenow',pct);
   const p=precioMin()[1];
@@ -547,6 +561,7 @@ function avance(){
 function fechaTip(){
   const t=$('#fechaTip'), f=val('fecha'); if(!f){ t.textContent=''; return; }
   const ent=new Date(`${f}T${val('hora')||'23:59'}`), h=(ent-Date.now())/36e5;
+  if(esOtro()){ t.textContent=h<0?'Esa fecha ya pasó.':''; return; }
   const fmt=d=>d.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});
   t.textContent= h<0 ? 'Esa fecha ya pasó.'
     : h<24 ? 'Es para menos de 24 h: lleva recargo de +50 % sobre la lista.'
@@ -556,7 +571,7 @@ function fechaTip(){
 }
 const pasoObs=new IntersectionObserver(es=>es.forEach(e=>{ if(!e.isIntersecting) return;
   const l=e.target.querySelector('legend'); if(!l) return;
-  $('#avPaso').innerHTML=`Paso ${l.querySelector('b').textContent} de ${pasos.length} · <b>${l.textContent.replace(/^\d+/,'').trim()}</b>`;
+  $('#avPaso').innerHTML=`Paso ${l.querySelector('b').textContent} de ${pasos.filter(f=>!f.hidden).length} · <b>${l.textContent.replace(/^\d+/,'').trim()}</b>`;
 }),{rootMargin:'-35% 0px -55% 0px'});
 pasos.forEach(fs=>pasoObs.observe(fs));
 form.addEventListener('input',()=>{ toggles(); save(); avance(); fechaTip(); });
