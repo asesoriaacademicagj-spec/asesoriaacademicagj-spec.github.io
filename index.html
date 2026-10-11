@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
 <style>
-/* Layout: una sola columna estrecha tipo formulario impreso; cada paso es una hoja numerada con su borde lateral. */
+/* Remake 2026-10-10 · base: tokens, reinicio, tipografía de cuerpo, controles compartidos */
 :root{
   --bg:#eef2f3; --paper:#ffffff; --ink:#13232b; --muted:#566a73; --line:#cdd8dc;
   --sea:#0d6f74; --sea-soft:#dcefef; --sun:#9c5b07; --bad:#b3261e; --bad-soft:#fbe9e7;
@@ -24,68 +24,40 @@
   --bg:#0c1519; --paper:#132027; --ink:#e3ecee; --muted:#93a8b0; --line:#2a3b43;
   --sea:#4fc1c4; --sea-soft:#163338; --sun:#f0ae4b; --bad:#ff8a80; --bad-soft:#3a1c1a; color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--body);padding-inline:16px;padding-block:24px 64px}
-.wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
-header{display:flex;flex-direction:column;gap:6px;padding-block:8px}
-.brand{font:800 clamp(28px,7vw,40px)/1.05 var(--display);letter-spacing:-.02em;text-wrap:balance;margin:0}
-.brand span{color:var(--sea)}
-.lede{margin:0;color:var(--muted);max-width:60ch}
+html{color-scheme:light}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--body);padding-inline:16px;padding-block:0 64px}
+img{max-width:100%}
+.wrap{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
 .tag{font:600 14px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--sun)}
-fieldset{border:0;margin:0;padding:20px 18px;background:var(--paper);border-radius:var(--r);border-left:4px solid var(--sea);display:flex;flex-direction:column;gap:16px;min-width:0}
-legend{float:left;width:100%;padding:0;display:flex;gap:10px;align-items:baseline;font:700 20px/1.2 var(--display)}
-legend b{font:800 14px/1 var(--display);color:var(--sea);background:var(--sea-soft);border-radius:6px;padding:5px 8px;font-variant-numeric:tabular-nums}
-.f{display:flex;flex-direction:column;gap:6px;min-width:0}
-.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
 label,.lbl{font-weight:700;font-size:15px}
 .opt{font-weight:400;color:var(--muted);font-size:14px}
 .hint{font-size:14px;color:var(--muted);margin:0}
-input[type=text],input[type=tel],input[type=number],input[type=date],input[type=time],select,textarea{
-  font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;min-width:0}
-textarea{min-height:96px;resize:vertical}
-input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible,.choice input:focus-visible+span{outline:3px solid var(--sun);outline-offset:2px}
-.choices{display:flex;flex-direction:column;gap:8px}
-.choice{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;cursor:pointer;font-weight:400}
-.choice:has(input:checked){border-color:var(--sea);background:var(--sea-soft)}
-.choice input{margin-top:4px;accent-color:var(--sea);flex:none;width:18px;height:18px}
-.choice small{display:block;color:var(--muted);font-size:14px}
-.tpl{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
-.tpl .choice{flex-direction:column;gap:8px;padding:8px}
-.tpl img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;display:block}
-.tpl .noimg{aspect-ratio:16/9;border-radius:5px;display:grid;place-items:center;background:var(--bg);color:var(--muted);font-size:14px;text-align:center;padding:8px}
-.tpl .cap{display:flex;gap:8px;align-items:center}
-.tpl .cap input{margin:0}
-.note{margin:0;padding:12px 14px;border-radius:8px;background:var(--sea-soft);font-size:14px}
-.members{display:flex;flex-direction:column;gap:8px}
-.member{display:flex;gap:8px}
-.member input{flex:1}
+.err{color:var(--bad);font-size:14px;margin:0}
+.invalid{border-color:var(--bad)!important;background:var(--bad-soft)!important}
+.status{font-size:14px;color:var(--sea);font-weight:700;margin:0}
+.code{font:800 26px/1.1 var(--display);color:var(--sea);letter-spacing:.02em}
+.addr{font:700 16px/1.3 ui-monospace,monospace;user-select:all;word-break:break-all;background:var(--bg);padding:8px 10px;border-radius:6px;display:inline-block}
+pre{white-space:pre-wrap;word-break:break-word;font:14px/1.5 ui-monospace,monospace;background:var(--bg);border-radius:8px;padding:12px;margin:0;max-height:320px;overflow:auto}
+/* botones (todos los bloques) */
 button,.btn{font:700 15px/1 var(--body);border-radius:8px;padding:12px 16px;cursor:pointer;border:1.5px solid var(--sea);background:transparent;color:var(--sea);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px}
+button[disabled]{opacity:.6;cursor:wait}
 .primary{background:var(--sea);color:var(--paper)}
 .ghost{border-color:var(--line);color:var(--muted)}
 .x{border-color:var(--line);color:var(--muted);padding:0 14px;flex:none}
-.actions{display:flex;flex-wrap:wrap;gap:10px}
-.err{color:var(--bad);font-size:14px;margin:0}
-.invalid{border-color:var(--bad)!important;background:var(--bad-soft)!important}
-#review{background:var(--paper);border-radius:var(--r);padding:20px 18px;display:flex;flex-direction:column;gap:16px;border-left:4px solid var(--sun)}
-#review h2,#pago h2{margin:0;font:700 22px/1.2 var(--display)}
-.steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:12px}
-.addr{font:700 16px/1.3 ui-monospace,monospace;user-select:all;word-break:break-all;background:var(--bg);padding:8px 10px;border-radius:6px;display:inline-block}
-pre{white-space:pre-wrap;word-break:break-word;font:14px/1.5 ui-monospace,monospace;background:var(--bg);border-radius:8px;padding:12px;margin:0;max-height:320px;overflow:auto}
-#pago{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
-#pago img{width:220px;height:220px;image-rendering:pixelated;background:#fff;padding:12px;border-radius:10px;border:1px solid var(--line)}
-.status{font-size:14px;color:var(--sea);font-weight:700;margin:0}
-footer{font-size:14px;color:var(--muted);text-align:center}
-@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
-[hidden]{display:none!important}
-html{color-scheme:light}
-body{margin:0;padding-top:max(24px,env(safe-area-inset-top));}
-img{max-width:100%}
-input[type=email]{font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;min-width:0}
-input[type=file]{font:inherit;font-size:14px;max-width:100%}
-.files{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2px}
-.code{font:800 26px/1.1 var(--display);color:var(--sea);letter-spacing:.02em}
-button[disabled]{opacity:.6;cursor:wait}
-/* Rediseño 2026-10-03: portada con propuesta y pasos; tarjetas separadas; envío fijo abajo */
-.wrap{max-width:680px}
+/* foco visible */
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible,.choice input:focus-visible+span{outline:3px solid var(--sun);outline-offset:2px}
+/* Bloque: barra superior (igual que en precios.html) */
+.bar{margin-inline:-16px;margin-bottom:20px;position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar .bw{display:flex;align-items:center;gap:12px;min-height:56px;max-width:680px;margin:0 auto;padding-inline:16px}
+.bar .marca{font:800 17px/1 var(--display);text-decoration:none;color:var(--ink);white-space:nowrap}
+.bar .princ{display:flex;gap:4px}
+.bar a:not(.cta){white-space:nowrap;text-decoration:none;font-weight:700;font-size:15px;padding:10px 12px;border-radius:8px;color:var(--sea)}
+.bar a[aria-current]{background:var(--sea-soft)}
+.bar .cta{margin-left:auto;flex:none;white-space:nowrap;text-decoration:none;font-weight:700;font-size:15px;padding:10px 16px;border-radius:8px;background:var(--sea);color:var(--paper)}
+@media (max-width:600px){.bar .marca{display:none}.bar .bw{gap:6px}.bar .princ{margin-right:0}}
+/* Bloque: hero */
 .hero{background:linear-gradient(155deg,#0d6f74 0%,#0a4c50 100%);color:#fff;border-radius:18px;padding:26px 22px 24px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;isolation:isolate}
 .hero::after{content:"";position:absolute;right:-70px;top:-70px;width:220px;height:220px;border-radius:50%;background:#ffd28a;opacity:.14;z-index:-1}
 .hero .top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
@@ -101,59 +73,64 @@ button[disabled]{opacity:.6;cursor:wait}
 .hero .cta:hover{background:#ffe0a8}
 .hero .desde{margin:0;font-size:15px;color:#fff}
 .hero small{color:#d8eeee;font-size:14px}
+.hero .ver-precios{display:inline-block;padding:10px 4px;color:#ffd28a;font-weight:700;white-space:nowrap}
+/* Bloque: «Cómo funciona» (3 pasos bajo el hero) */
 .pasos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;counter-reset:paso}
 .pasos li{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;font-size:14px;color:var(--muted);counter-increment:paso}
 .pasos li::before{content:counter(paso);display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--sea-soft);color:var(--sea);font:800 14px/1 var(--display);margin-bottom:8px}
 .pasos b{display:block;color:var(--ink);font:700 16px/1.25 var(--display);margin-bottom:2px}
 @media (max-width:600px){.pasos{grid-template-columns:1fr}.pasos li{display:grid;grid-template-columns:26px 1fr;column-gap:12px}.pasos li::before{grid-row:span 2;margin:0}}
+/* Bloque: «Qué incluye cada presentación» */
 .nivel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
 .nivel h2{font:700 18px/1.25 var(--display);margin:0 0 8px}
 .nivel ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;font-size:15px}
 .nivel p{margin:10px 0 0;font-size:14px;color:var(--muted)}
 .form-tit{font:700 22px/1.2 var(--display);margin:6px 0 -6px}
+/* Bloque: formulario «Tu encargo» (pasos 1-7, controles, barra de avance) */
 form{display:flex;flex-direction:column;gap:14px}
-fieldset{border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(19,35,43,.05),0 6px 18px rgba(19,35,43,.05);padding:22px 20px;scroll-margin-top:16px}
-legend b{background:var(--sea);color:var(--paper);border-radius:99px;min-width:26px;text-align:center}
-input[type=text],input[type=tel],input[type=number],input[type=date],input[type=time],input[type=email],select,textarea{background:var(--paper);transition:border-color .15s}
+fieldset{border:1px solid var(--line);margin:0;padding:22px 20px;background:var(--paper);border-radius:16px;box-shadow:0 1px 2px rgba(19,35,43,.05),0 6px 18px rgba(19,35,43,.05);display:flex;flex-direction:column;gap:16px;min-width:0;scroll-margin-top:16px}
+legend{float:left;width:100%;padding:0;display:flex;gap:10px;align-items:baseline;font:700 20px/1.2 var(--display)}
+legend b{font:800 14px/1 var(--display);color:var(--paper);background:var(--sea);border-radius:99px;padding:5px 8px;min-width:26px;text-align:center;font-variant-numeric:tabular-nums}
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+input[type=text],input[type=tel],input[type=number],input[type=date],input[type=time],input[type=email],select,textarea{
+  font:inherit;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;min-width:0;transition:border-color .15s}
+textarea{min-height:96px;resize:vertical}
 input:hover,select:hover,textarea:hover{border-color:var(--muted)}
 ::placeholder{color:var(--muted);opacity:1;font-size:14px}
-.choice{transition:border-color .15s,background .15s}
-.choice:hover{border-color:var(--sea)}
+input[type=file]{font:inherit;font-size:14px;max-width:100%}
 input[type=file]::file-selector-button{font:700 14px/1 var(--body);border:1.5px solid var(--sea);background:var(--sea-soft);color:var(--sea);border-radius:8px;padding:9px 12px;margin-right:10px;cursor:pointer}
-.actions{position:sticky;bottom:0;z-index:2;padding:18px 0 max(12px,env(safe-area-inset-bottom));background:linear-gradient(to bottom,transparent,var(--bg) 35%)}
+.files{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.choices{display:flex;flex-direction:column;gap:8px}
+.choice{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;cursor:pointer;font-weight:400;transition:border-color .15s,background .15s}
+.choice:has(input:checked){border-color:var(--sea);background:var(--sea-soft)}
+.choice:hover{border-color:var(--sea)}
+.choice input{margin-top:4px;accent-color:var(--sea);flex:none;width:18px;height:18px}
+.choice small{display:block;color:var(--muted);font-size:14px}
+.tpl{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.tpl .choice{flex-direction:column;gap:8px;padding:8px}
+.tpl img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;display:block}
+.tpl .noimg{aspect-ratio:16/9;border-radius:5px;display:grid;place-items:center;background:var(--bg);color:var(--muted);font-size:14px;text-align:center;padding:8px}
+.tpl .cap{display:flex;gap:8px;align-items:center}
+.tpl .cap input{margin:0}
+.note{margin:0;padding:12px 14px;border-radius:8px;background:var(--sea-soft);font-size:14px}
+.members{display:flex;flex-direction:column;gap:8px}
+.member{display:flex;gap:8px}
+.member input{flex:1}
+/* barra de envío fija abajo + avance real del formulario */
+.actions{display:flex;flex-wrap:wrap;gap:10px;position:sticky;bottom:0;z-index:2;padding:10px 0 max(12px,env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line);box-shadow:0 -8px 16px -12px rgb(0 0 0 / .25)}
 .actions .primary{flex:1;min-height:50px;font-size:16px}
-/* Avance real del formulario: paso visible, datos obligatorios listos y precio de lista, siempre a la vista abajo */
-.actions{background:var(--bg);border-top:1px solid var(--line);padding-top:10px;box-shadow:0 -8px 16px -12px rgb(0 0 0 / .25)}
 .avance{flex-basis:100%;display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--muted)}
 .avance-txt{display:flex;justify-content:space-between;gap:4px 12px;flex-wrap:wrap}
 .avance-txt b{color:var(--ink)}
 .barra{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
 .barra i{display:block;height:100%;width:0;background:var(--sea);border-radius:3px;transition:width .35s ease}
 @media (prefers-reduced-motion:reduce){.barra i{transition:none}}
-.hero .ver-precios,footer a{display:inline-block;padding:10px 4px}
-#review,#sent,#fail{border-radius:16px}
-.hero .ver-precios{color:#ffd28a;font-weight:700;white-space:nowrap}
-footer a{color:var(--sea);font-weight:700}
-@media print{
-  body{background:#fff;color:#000;padding:0}
-  .bar,header,form,footer,#pago,.noprint{display:none!important}
-  #sent{border:0;padding:0}
-  pre{max-height:none;background:#fff;border:1px solid #999}
-  details{display:block}
-  details>summary{display:none}
-}
-/* Barra superior, igual que en precios.html */
-body{padding-top:0}
-.bar{margin-inline:-16px;margin-bottom:20px}
-.bar{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.bar .bw{display:flex;align-items:center;gap:12px;min-height:56px;max-width:680px;margin:0 auto;padding-inline:16px}
-.bar .marca{font:800 17px/1 var(--display);text-decoration:none;color:var(--ink);white-space:nowrap}
-.bar .princ{display:flex;gap:4px}
-.bar a:not(.cta){white-space:nowrap;text-decoration:none;font-weight:700;font-size:15px;padding:10px 12px;border-radius:8px;color:var(--sea)}
-.bar a[aria-current]{background:var(--sea-soft)}
-.bar .cta{margin-left:auto;flex:none;white-space:nowrap;text-decoration:none;font-weight:700;font-size:15px;padding:10px 16px;border-radius:8px;background:var(--sea);color:var(--paper)}
-@media (max-width:600px){.bar .marca{display:none}.bar .bw{gap:6px}.bar .princ{margin-right:0}}
-/* Modo socio (solo con #socio) */
+/* Bloques: #sent «Encargo recibido» y #fail «No se pudo enviar» (el fondo, el radio y el borde van en línea en el HTML) */
+#pago{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+#pago h2{margin:0;font:700 22px/1.2 var(--display)}
+#pago img{width:220px;height:220px;image-rendering:pixelated;background:#fff;padding:12px;border-radius:10px;border:1px solid var(--line)}
+/* Bloque: #socio (modo socio: nuevo retoque / mis tickets) */
 body.ms .bar,body.ms .wrap>:not(#socio){display:none!important}
 #socio{display:flex;flex-direction:column;gap:20px}
 #socio .tabs{display:flex;gap:8px}
@@ -175,6 +152,18 @@ body.ms .bar,body.ms .wrap>:not(#socio){display:none!important}
 #socio .est.Rechazado{background:var(--bad-soft);color:var(--bad)}
 #socio .est.Hecho{background:var(--sea);color:var(--paper)}
 #socio button.sec{background:transparent;color:var(--sea);min-height:44px}
+/* Bloque: pie */
+footer{font-size:14px;color:var(--muted);text-align:center}
+footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
+/* Impresión */
+@media print{
+  body{background:#fff;color:#000;padding:0}
+  .bar,header,form,footer,#pago,.noprint{display:none!important}
+  #sent{border:0;padding:0}
+  pre{max-height:none;background:#fff;border:1px solid #999}
+  details{display:block}
+  details>summary{display:none}
+}
 </style>
 </head>
 <body>
