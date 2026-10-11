@@ -241,6 +241,9 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
   <div class="f"><label for="pide">¿Qué pide el profe?</label>
     <textarea id="pide" required placeholder="Puntos que debe tener, cómo se califica, ejemplos que exige, lo que haya dicho en clase…"></textarea>
 </div>
+  <div class="f" data-solo-otro hidden><label for="entregable">¿Qué hay que entregar?</label>
+    <textarea id="entregable" required placeholder="Ej.: informe de laboratorio de 5 páginas con tablas y conclusiones"></textarea>
+    <p class="hint">Describe el producto final con el mayor detalle que puedas: es lo que más pesa en el precio.</p></div>
   <div class="f"><label for="adjuntos">Guía, rúbrica o material <span class="opt">(opcional)</span></label>
     <input id="adjuntos" type="file" multiple accept="image/*,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt">
     <p class="hint">Fotos, PDF, Word o PowerPoint. Hasta 5 archivos y 10 MB en total. Si tienen plantilla propia, súbanla aquí.</p>
@@ -260,6 +263,14 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
       <label class="choice"><input type="radio" name="contenido" id="cont-inv" value="Investígalo tú"><span>Investígalo tú<small>Busco la información en fuentes confiables y las cito.</small></span></label>
       <label class="choice"><input type="radio" name="contenido" id="cont-mix" value="Mixto: damos una parte y el resto lo investigas"><span>Mixto<small>Damos una parte y el resto lo investigas.</small></span></label>
     </div></div>
+  <div class="row">
+    <div class="f"><label for="idioma">Idioma de entrega</label><select id="idioma"><option>Español</option><option>Inglés</option><option>Español e inglés</option></select></div>
+    <div class="f"><label for="citas">Normas de citación <span class="opt">(opcional)</span></label><select id="citas"><option value="">No piden o no sé</option><option>APA 7.ª edición</option><option>APA 6.ª edición</option><option>Vancouver</option><option>ICONTEC</option><option>IEEE</option><option>Otra (la escribo en «Algo más»)</option></select></div>
+  </div>
+  <div class="row" data-solo-otro hidden>
+    <div class="f"><label for="formato">Formato de entrega</label><select id="formato"><option value="">Elige</option><option>Word (.docx)</option><option>PDF</option><option>Excel</option><option>Otro (lo escribo arriba)</option></select></div>
+    <div class="f"><label for="extension">Extensión <span class="opt">(opcional)</span></label><input id="extension" type="text" placeholder="Ej.: 5 páginas o 1.500 palabras"></div>
+  </div>
 </fieldset>
 
 <fieldset>
@@ -282,11 +293,23 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
 
 <fieldset>
   <legend><b>5</b>Extras</legend>
-  <div class="choices" data-dia>
+  <div class="row" data-dia>
+    <div class="f"><label for="densidad">Texto en cada diapositiva <span class="opt">(opcional)</span></label><select id="densidad"><option value="">Elige</option><option>Poco texto y más imagen</option><option>Equilibrado</option><option>Más texto, para leer</option></select></div>
+    <div class="f"><label for="material">¿Con qué material cuentas? <span class="opt">(opcional)</span></label><select id="material"><option value="">Elige</option><option>Solo el tema</option><option>Apuntes, libro o guía del profe</option><option>Un borrador mío</option><option>Una presentación anterior para mejorar</option></select></div>
+  </div>
+  <div class="f" data-dia><span class="lbl" id="ctipoL">¿Qué lleva el tema? <span class="opt">(marca lo que aplique)</span></span>
+    <div class="choices" aria-labelledby="ctipoL">
+      <label class="choice"><input type="checkbox" id="ct-formulas"><span>Fórmulas o procedimientos paso a paso</span></label>
+      <label class="choice"><input type="checkbox" id="ct-datos"><span>Datos, tablas o gráficas</span></label>
+      <label class="choice"><input type="checkbox" id="ct-imagenes"><span>Imágenes, esquemas o mapas</span></label>
+      <label class="choice"><input type="checkbox" id="ct-casos"><span>Casos o ejemplos reales</span></label>
+    </div></div>
+  <div class="f" data-dia><span class="lbl" id="extrasL">¿Quieres algún extra? <span class="opt">(opcional)</span></span>
+  <div class="choices" aria-labelledby="extrasL">
     <label class="choice"><input type="checkbox" id="guion"><span>Guion o notas del orador<small>Qué decir en cada diapositiva.</small></span></label>
     <label class="choice"><input type="checkbox" id="guia"><span>Guía de estudio para el grupo<small>Resumen y posibles preguntas del profe.</small></span></label>
     <label class="choice"><input type="checkbox" id="paneles"><span>Paneles interactivos<small>Deslizador o lienzo en las diapositivas. Es un extra: se cotiza aparte.</small></span></label>
-  </div>
+  </div></div>
   <div class="f"><label for="obs">Algo más <span class="opt">(opcional)</span></label><textarea id="obs" placeholder="Colores, estilo, cosas que el profe no quiere ver, enlaces de referencia…"></textarea></div>
 </fieldset>
 
@@ -409,6 +432,12 @@ $('#addMember').onclick=()=>{addMember().focus(); save();};
 
 const BASE=5000, PRECIO=1000, cop=n=>'$'+n.toLocaleString('es-CO');
 const esOtro=()=>$('#tipo-otro').checked;
+const marcados=ids=>ids.filter(i=>$('#'+i).checked).map(i=>$('#'+i).parentElement.textContent.trim());
+function detalles(){
+  return [['Idioma',val('idioma')],['Normas de citación',val('citas')],
+    ...(esOtro()?[['Entregable',val('entregable')],['Formato',val('formato')],['Extensión',val('extension')]]
+      :[['Texto por diapositiva',val('densidad')],['Material de partida',val('material')],['El tema lleva',marcados(['ct-formulas','ct-datos','ct-imagenes','ct-casos']).join(', ')]])].filter(([k,v])=>v);
+}
 function precioMin(){ if(esOtro()) return [0,0]; const n=Math.max(0,Math.floor(+val('cantidad')||0)); return [n, n?BASE+n*PRECIO:0]; }
 function toggles(){
   { const [n,p]=precioMin(), el=$('#precio'); el.hidden=!n; el.innerHTML=n?`Precio de lista: <b>${cop(p)} COP</b> (${cop(BASE)} de base + ${n} × ${cop(PRECIO)}). Para empezar pagas la mitad: <b>${cop(Math.ceil(p/200)*100)}</b>. El valor final te lo confirmamos por correo según contenido, urgencia y extras.`:''; }
@@ -419,6 +448,7 @@ function toggles(){
   $('#todosNote').hidden=!m||m==='modo-libre';
   const otro=esOtro();
   $$('[data-dia]').forEach(e=>e.hidden=otro);
+  $$('[data-solo-otro]').forEach(e=>e.hidden=!otro);
   if(otro){ $('#algunosBox').hidden=true; $('#todosNote').hidden=true; }
   $$('[data-otro]').forEach(e=>{ if(e.dataset.dia0===undefined) e.dataset.dia0=e.textContent; e.textContent=otro?e.dataset.otro:e.dataset.dia0; });
   $$('[data-sw]').forEach(e=>{ if(e.dataset.dia0===undefined) e.dataset.dia0=e.textContent; e.textContent=otro?e.dataset.dia0.replace('las diapositivas terminadas','el trabajo terminado'):e.dataset.dia0; });
@@ -475,7 +505,7 @@ function texto(){
     '— Datos —',`Nombre: ${val('nombre')}`,`Correo: ${val('correo')}`,
     `Programa: ${prog}`,`Sede: ${sede}`,`Semestre: ${val('semestre')}`,`Asignatura: ${val('asignatura')}`, val('docente')&&`Docente: ${val('docente')}`,'',
     '— Encargo —',`Tema: ${val('tema')}`, !otro&&`Diapositivas: ${val('cantidad')}`, !otro&&val('minutos')&&`Duración de la exposición: ${val('minutos')} min`,
-    `Entrega: ${fmtFecha(val('fecha'))}${val('hora')?' a las '+val('hora'):''}`,`Contenido: ${radio('contenido')}`,'','Lo que pide el profe:',val('pide'),'',
+    `Entrega: ${fmtFecha(val('fecha'))}${val('hora')?' a las '+val('hora'):''}`,`Contenido: ${radio('contenido')}`,...detalles().map(([k,v])=>`${k}: ${v}`),'','Lo que pide el profe:',val('pide'),'',
     otro?'— Grupo —':'— Exposición —',!otro&&`Modalidad: ${modo}`,`Integrantes (${names.length}):`,...names.map((n,i)=>`  ${i+1}. ${n}`),'',
     otro?'— Observaciones —':'— Extras —',!otro&&`Adicionales: ${extras.length?extras.join(', '):'Ninguno'}`,!otro&&`Plantilla: ${radio('plantilla')}`, val('obs')&&`Observaciones: ${val('obs')}`,'',
     '— Pago —',...(otro?['Precio: se cotiza por correo (no son diapositivas, no hay precio de lista)','Anticipo para empezar (50 %): se indica con el precio; el otro 50 % al ver el trabajo terminado']:[`Precio base: ${cop(precioMin()[1])} COP (${precioMin()[0]} × ${cop(PRECIO)}; el valor final se confirma por correo)`,`Anticipo para empezar (50 %): ${cop(Math.ceil(precioMin()[1]/200)*100)} COP; el otro 50 % al ver las diapositivas terminadas`]),`Nequi del que paga: ${val('nequi').replace(/\D/g,'')}`,
@@ -511,7 +541,7 @@ async function enviar(){
       programa:prog, sede, semestre:val('semestre'), asignatura:val('asignatura'), docente:val('docente'), tema:val('tema'),
       cantidad:otro?'':val('cantidad'), minutos:otro?'':val('minutos'), entrega:`${val('fecha')} ${val('hora')}`.trim(), contenido:radio('contenido'), pide:val('pide'),
       modo:otro?'':radio('modo')+($('#modo-algunos').checked&&val('exponen')?` (${val('exponen')} de ${names.length})`:''), integrantes:names,
-      extras:otro?[]:[$('#guion').checked&&'Guion',$('#guia').checked&&'Guía de estudio',$('#paneles').checked&&'Paneles interactivos'].filter(Boolean), plantilla:otro?'':radio('plantilla'), obs:(otro?'[OTRO TRABAJO, no son diapositivas] ':'')+val('obs'), tipo:radio('tipo'),
+      extras:otro?[]:[$('#guion').checked&&'Guion',$('#guia').checked&&'Guía de estudio',$('#paneles').checked&&'Paneles interactivos'].filter(Boolean), plantilla:otro?'':radio('plantilla'), obs:(otro?'[OTRO TRABAJO, no son diapositivas] ':'')+(detalles().filter(([k,v])=>!(k==='Idioma'&&v==='Español')).length?'('+detalles().filter(([k,v])=>!(k==='Idioma'&&v==='Español')).map(([k,v])=>`${k}: ${v}`).join('; ')+') ':'')+val('obs'), tipo:radio('tipo'),
       nequi:val('nequi').replace(/\D/g,''),
       files:await Promise.all(files().map(async f=>({name:f.name,type:f.type,b64:await b64(f)})))
     };
