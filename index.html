@@ -265,8 +265,17 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
     </div></div>
   <div class="row">
     <div class="f"><label for="idioma">Idioma de entrega</label><select id="idioma"><option>Español</option><option>Inglés</option><option>Español e inglés</option></select></div>
-    <div class="f"><label for="citas">Normas de citación <span class="opt">(opcional)</span></label><select id="citas"><option value="">No piden o no sé</option><option>APA 7.ª edición</option><option>APA 6.ª edición</option><option>Vancouver</option><option>ICONTEC</option><option>IEEE</option><option>Otra (la escribo en «Algo más»)</option></select></div>
+    <div class="f"><label for="citas">Citación <span class="opt">(opcional)</span></label><select id="citas"><option value="">Ninguna</option><option>APA 7.ª edición</option><option>APA 6.ª edición</option><option>Vancouver</option><option>ICONTEC</option><option>IEEE</option><option>Otra (la escribo en «Algo más»)</option></select></div>
   </div>
+  <div class="row">
+    <div class="f"><label for="imagenes">Imágenes</label><input id="imagenes" type="number" min="0" max="200" inputmode="numeric" placeholder="Cantidad"></div>
+    <div class="f"><label for="origenImg">¿Quién las pone?</label><select id="origenImg"><option value="">Elige</option><option>Las busco o hago yo</option><option>Las pones tú</option><option>Mixto</option></select></div>
+  </div>
+  <div class="row">
+    <div class="f"><label for="graficas">Gráficas o tablas</label><input id="graficas" type="number" min="0" max="200" inputmode="numeric" placeholder="Cantidad"></div>
+    <div class="f"><label for="fuentes">Fuentes mínimas</label><input id="fuentes" type="number" min="0" max="200" inputmode="numeric" placeholder="Cantidad"></div>
+  </div>
+  <p class="hint" style="margin:0">Imágenes, gráficas, tablas y fuentes: cantidades aproximadas y opcionales; sirven para cotizar con precisión.</p>
   <div class="row" data-solo-otro hidden>
     <div class="f"><label for="formato">Formato de entrega</label><select id="formato"><option value="">Elige</option><option>Word (.docx)</option><option>PDF</option><option>Excel</option><option>Otro (lo escribo arriba)</option></select></div>
     <div class="f"><label for="extension">Extensión <span class="opt">(opcional)</span></label><input id="extension" type="text" placeholder="Ej.: 5 páginas o 1.500 palabras"></div>
@@ -297,6 +306,11 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
     <div class="f"><label for="densidad">Texto en cada diapositiva <span class="opt">(opcional)</span></label><select id="densidad"><option value="">Elige</option><option>Poco texto y más imagen</option><option>Equilibrado</option><option>Más texto, para leer</option></select></div>
     <div class="f"><label for="material">¿Con qué material cuentas? <span class="opt">(opcional)</span></label><select id="material"><option value="">Elige</option><option>Solo el tema</option><option>Apuntes, libro o guía del profe</option><option>Un borrador mío</option><option>Una presentación anterior para mejorar</option></select></div>
   </div>
+  <div class="row" data-dia>
+    <div class="f"><label for="animaciones">Animaciones extra</label><input id="animaciones" type="number" min="0" max="200" inputmode="numeric" placeholder="Cantidad"></div>
+    <div class="f"><label for="videos">Videos o audios</label><input id="videos" type="number" min="0" max="200" inputmode="numeric" placeholder="Cantidad"></div>
+  </div>
+  <p class="hint" data-dia style="margin:0">Animaciones: las que van aparte de que los pasos aparezcan uno a uno (eso ya está incluido). Cantidades aproximadas y opcionales.</p>
   <div class="f" data-dia><span class="lbl" id="ctipoL">¿Qué lleva el tema? <span class="opt">(marca lo que aplique)</span></span>
     <div class="choices" aria-labelledby="ctipoL">
       <label class="choice"><input type="checkbox" id="ct-formulas"><span>Fórmulas o procedimientos paso a paso</span></label>
@@ -434,9 +448,9 @@ const BASE=5000, PRECIO=1000, cop=n=>'$'+n.toLocaleString('es-CO');
 const esOtro=()=>$('#tipo-otro').checked;
 const marcados=ids=>ids.filter(i=>$('#'+i).checked).map(i=>$('#'+i).parentElement.textContent.trim());
 function detalles(){
-  return [['Idioma',val('idioma')],['Normas de citación',val('citas')],
+  return [['Idioma',val('idioma')],['Normas de citación',val('citas')],['Imágenes',val('imagenes')],['Origen de las imágenes',val('origenImg')],['Gráficas o tablas',val('graficas')],['Fuentes mínimas',val('fuentes')],
     ...(esOtro()?[['Entregable',val('entregable')],['Formato',val('formato')],['Extensión',val('extension')]]
-      :[['Texto por diapositiva',val('densidad')],['Material de partida',val('material')],['El tema lleva',marcados(['ct-formulas','ct-datos','ct-imagenes','ct-casos']).join(', ')]])].filter(([k,v])=>v);
+      :[['Animaciones extra',val('animaciones')],['Videos o audios',val('videos')],['Texto por diapositiva',val('densidad')],['Material de partida',val('material')],['El tema lleva',marcados(['ct-formulas','ct-datos','ct-imagenes','ct-casos']).join(', ')]])].filter(([k,v])=>v);
 }
 function precioMin(){ if(esOtro()) return [0,0]; const n=Math.max(0,Math.floor(+val('cantidad')||0)); return [n, n?BASE+n*PRECIO:0]; }
 function toggles(){
@@ -485,6 +499,7 @@ function validate(){
   });
   if($('#programa').value==='otro' && !val('programaOtro')){ $('#programaOtro').classList.add('invalid'); bad.push($('#programaOtro')); }
   if($('#sede').value==='otra' && !val('sedeOtra')){ $('#sedeOtra').classList.add('invalid'); bad.push($('#sedeOtra')); }
+  ['imagenes','graficas','fuentes','animaciones','videos'].forEach(id=>{ const el=$('#'+id), v=val(id); if(el.closest('[hidden]')||v==='') return; if(!(Number.isInteger(+v)&&+v>=0&&+v<=200)){ el.classList.add('invalid'); bad.push(el); } });
   $$('[data-req]').forEach(g=>{ if(g.closest('[hidden]')) return; if(!radio(g.dataset.req)){ g.querySelectorAll('.choice').forEach(c=>c.classList.add('invalid')); bad.push(g.querySelector('input')); }});
   const names=$$('.mi').map(i=>i.value.trim()).filter(Boolean);
   $('#membersErr').hidden=names.length>0; if(!names.length){ $$('.mi').forEach(i=>i.classList.add('invalid')); bad.push($('.mi')); }
