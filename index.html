@@ -318,6 +318,14 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
       <label class="choice"><input type="checkbox" id="ct-imagenes"><span>Imágenes, esquemas o mapas</span></label>
       <label class="choice"><input type="checkbox" id="ct-casos"><span>Casos o ejemplos reales</span></label>
     </div></div>
+  <div class="f" data-dia><label for="ejercicios">Ejercicios resueltos paso a paso</label><input id="ejercicios" type="number" min="0" max="200" inputmode="numeric" placeholder="Cantidad"><p class="hint">Si el tema los lleva; cantidad aproximada.</p></div>
+  <div class="f" data-dia><span class="lbl" id="cierreL">¿Qué diapositivas finales llevan? <span class="opt">(marca lo que aplique)</span></span>
+    <div class="choices" aria-labelledby="cierreL">
+      <label class="choice"><input type="checkbox" id="ci-concl"><span>Conclusiones</span></label>
+      <label class="choice"><input type="checkbox" id="ci-biblio"><span>Bibliografía o fuentes</span></label>
+      <label class="choice"><input type="checkbox" id="ci-preg"><span>Preguntas del público</span></label>
+      <label class="choice"><input type="checkbox" id="ci-gracias"><span>Agradecimiento</span></label>
+    </div></div>
   <div class="f" data-dia><span class="lbl" id="extrasL">¿Quieres algún extra? <span class="opt">(opcional)</span></span>
   <div class="choices" aria-labelledby="extrasL">
     <label class="choice"><input type="checkbox" id="guion"><span>Guion o notas del orador<small>Qué decir en cada diapositiva.</small></span></label>
@@ -337,6 +345,18 @@ footer a{display:inline-block;padding:10px 4px;color:var(--sea);font-weight:700}
     <label class="choice"><span class="noimg">La suben en el paso 3</span><span class="cap"><input type="radio" name="plantilla" id="tpl-propia" value="La envía el grupo">La enviamos nosotros</span></label>
     <label class="choice"><span class="noimg">Diseño a criterio del asesor</span><span class="cap"><input type="radio" name="plantilla" id="tpl-libre" value="Libre">Libre</span></label>
   </div>
+  <div class="row">
+    <div class="f"><label for="estilo">Estilo visual</label><select id="estilo"><option value="">Elige</option><option>Sobrio y limpio</option><option>Con ilustraciones o personajes</option><option>Con fotografías reales</option><option>Que decida el asesor</option></select></div>
+    <div class="f"><label for="colores">Colores</label><select id="colores"><option value="">Elige</option><option>Los de la universidad</option><option>Los indico en «Algo más»</option><option>Que decida el asesor</option></select></div>
+  </div>
+  <div class="f"><span class="lbl" id="portadaL">¿Qué más va en la portada? <span class="opt">(marca lo que aplique)</span></span>
+    <p class="hint">Los nombres del grupo van siempre.</p>
+    <div class="choices" aria-labelledby="portadaL">
+      <label class="choice"><input type="checkbox" id="pt-asig"><span>Asignatura y docente</span></label>
+      <label class="choice"><input type="checkbox" id="pt-logo"><span>Escudo o logo de la universidad</span></label>
+      <label class="choice"><input type="checkbox" id="pt-fecha"><span>Fecha de la exposición</span></label>
+      <label class="choice"><input type="checkbox" id="pt-prog"><span>Programa y sede</span></label>
+    </div></div>
 </fieldset>
 
 <fieldset>
@@ -450,7 +470,7 @@ const marcados=ids=>ids.filter(i=>$('#'+i).checked).map(i=>$('#'+i).parentElemen
 function detalles(){
   return [['Idioma',val('idioma')],['Normas de citación',val('citas')],['Imágenes',val('imagenes')],['Origen de las imágenes',val('origenImg')],['Gráficas o tablas',val('graficas')],['Fuentes mínimas',val('fuentes')],
     ...(esOtro()?[['Entregable',val('entregable')],['Formato',val('formato')],['Extensión',val('extension')]]
-      :[['Animaciones extra',val('animaciones')],['Videos o audios',val('videos')],['Texto por diapositiva',val('densidad')],['Material de partida',val('material')],['El tema lleva',marcados(['ct-formulas','ct-datos','ct-imagenes','ct-casos']).join(', ')]])].filter(([k,v])=>v);
+      :[['Animaciones extra',val('animaciones')],['Videos o audios',val('videos')],['Estilo visual',val('estilo')],['Colores',val('colores')],['La portada lleva',marcados(['pt-asig','pt-logo','pt-fecha','pt-prog']).join(', ')],['Ejercicios resueltos',val('ejercicios')],['Diapositivas finales',marcados(['ci-concl','ci-biblio','ci-preg','ci-gracias']).join(', ')],['Texto por diapositiva',val('densidad')],['Material de partida',val('material')],['El tema lleva',marcados(['ct-formulas','ct-datos','ct-imagenes','ct-casos']).join(', ')]])].filter(([k,v])=>v);
 }
 function precioMin(){ if(esOtro()) return [0,0]; const n=Math.max(0,Math.floor(+val('cantidad')||0)); return [n, n?BASE+n*PRECIO:0]; }
 function toggles(){
@@ -499,7 +519,7 @@ function validate(){
   });
   if($('#programa').value==='otro' && !val('programaOtro')){ $('#programaOtro').classList.add('invalid'); bad.push($('#programaOtro')); }
   if($('#sede').value==='otra' && !val('sedeOtra')){ $('#sedeOtra').classList.add('invalid'); bad.push($('#sedeOtra')); }
-  ['imagenes','graficas','fuentes','animaciones','videos'].forEach(id=>{ const el=$('#'+id), v=val(id); if(el.closest('[hidden]')||v==='') return; if(!(Number.isInteger(+v)&&+v>=0&&+v<=200)){ el.classList.add('invalid'); bad.push(el); } });
+  ['imagenes','graficas','fuentes','animaciones','videos','ejercicios'].forEach(id=>{ const el=$('#'+id), v=val(id); if(el.closest('[hidden]')||v==='') return; if(!(Number.isInteger(+v)&&+v>=0&&+v<=200)){ el.classList.add('invalid'); bad.push(el); } });
   $$('[data-req]').forEach(g=>{ if(g.closest('[hidden]')) return; if(!radio(g.dataset.req)){ g.querySelectorAll('.choice').forEach(c=>c.classList.add('invalid')); bad.push(g.querySelector('input')); }});
   const names=$$('.mi').map(i=>i.value.trim()).filter(Boolean);
   $('#membersErr').hidden=names.length>0; if(!names.length){ $$('.mi').forEach(i=>i.classList.add('invalid')); bad.push($('.mi')); }
