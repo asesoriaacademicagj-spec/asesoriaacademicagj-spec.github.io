@@ -39,18 +39,20 @@ a{color:var(--sea)}
 .bar .wrap{display:flex;align-items:center;gap:12px;min-height:56px}
 .bar .marca{font:800 17px/1 var(--display);text-decoration:none;color:var(--ink);white-space:nowrap}
 .bar nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-left:auto}
+.bar .princ{display:flex;gap:4px}
+.bar a[aria-current]{background:var(--sea-soft)}
 .bar nav::-webkit-scrollbar{display:none}
 .bar nav{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);padding-right:20px}
-.bar nav a{white-space:nowrap;text-decoration:none;font-weight:700;font-size:15px;padding:10px 12px;border-radius:8px}
+.bar nav a,.bar .princ a{white-space:nowrap;text-decoration:none;font-weight:700;font-size:15px;padding:10px 12px;border-radius:8px}
 footer a{display:inline-block;padding:8px 0}
-.bar nav a:hover{background:var(--sea-soft)}
-.bar .cta{flex:none;white-space:nowrap;text-decoration:none;font-weight:700;font-size:15px;padding:10px 16px;border-radius:8px;background:var(--sea);color:var(--paper)}
+.bar nav a:hover,.bar .princ a:hover{background:var(--sea-soft)}
+.bar .cta{margin-left:0;flex:none;white-space:nowrap;text-decoration:none;font-weight:700;font-size:15px;padding:10px 16px;border-radius:8px;background:var(--sea);color:var(--paper)}
 .bar .cta:hover{filter:brightness(1.08)}
-@media (max-width:600px){.bar .marca{display:none}.bar nav{margin-left:0}}
+@media (max-width:600px){.bar .marca{display:none}.bar .wrap{flex-wrap:wrap;gap:0 6px;padding-block:4px}.bar .princ{order:1}.bar .cta{order:2;margin-left:auto}.bar nav{order:3;flex-basis:100%;margin-left:0}}
 
 .hero{background:linear-gradient(160deg,#0d6f74,#0a4c50);color:#f2fbfb;padding-block:40px 44px}
 .hero .wrap{display:flex;flex-direction:column;gap:14px}
-.hero .tag{font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:#ffd28a}
+.hero .tag{font:700 14px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:#ffd28a}
 .hero h1{font-weight:800;font-size:clamp(34px,7vw,56px);line-height:1;letter-spacing:-.025em;max-width:16ch}
 .hero h1 em{font-style:normal;color:#ffd28a}
 .hero p{max-width:58ch;color:#cfe7e7}
@@ -62,7 +64,7 @@ footer a{display:inline-block;padding:8px 0}
 main{display:flex;flex-direction:column;gap:56px;padding-block:44px 72px}
 section{display:flex;flex-direction:column;gap:18px;min-width:0}
 .cab{display:flex;flex-direction:column;gap:6px;max-width:64ch}
-.paso-n{font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--sun)}
+.paso-n{font:700 14px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--sun)}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px}
 
 /* La ecuación del precio */
@@ -108,7 +110,7 @@ textarea{min-height:140px;resize:vertical}
 .total b{font:800 36px/1 var(--display);color:var(--sea);font-variant-numeric:tabular-nums}
 .mitades{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .mitades div{background:var(--bg);border-radius:10px;padding:10px 12px}
-.mitades small{display:block;color:var(--muted);font-size:13px}
+.mitades small{display:block;color:var(--muted);font-size:14px}
 .mitades b{font:700 21px/1.2 var(--display);font-variant-numeric:tabular-nums}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 16px/1 var(--body);border-radius:10px;padding:14px 18px;min-height:48px;cursor:pointer;border:1.5px solid var(--sea);background:var(--sea);color:var(--paper);text-decoration:none}
 .btn.sec{background:transparent;color:var(--sea)}
@@ -119,7 +121,7 @@ textarea{min-height:140px;resize:vertical}
 .srv{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px}
 .srv-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .srv .formula{font-size:15px;background:var(--bg);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
-.srv .formula span{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.srv .formula span{font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .ejs{margin:0;display:flex;flex-direction:column}
 .ejs div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line)}
 .ejs div:last-child{border-bottom:0}
@@ -127,7 +129,7 @@ textarea{min-height:140px;resize:vertical}
 .ejs dd{margin:0;font:800 20px/1 var(--display);color:var(--sea);font-variant-numeric:tabular-nums}
 .btn.mini{min-height:42px;padding:10px 14px;font-size:15px;margin-top:auto}
 .srv.top{border-color:var(--sea);box-shadow:0 0 0 1px var(--sea)}
-.srv .sello{flex:none;font-size:12px;font-weight:700;background:var(--sea);color:var(--paper);border-radius:999px;padding:3px 10px}
+.srv .sello{flex:none;font-size:14px;font-weight:700;background:var(--sea);color:var(--paper);border-radius:999px;padding:3px 10px}
 
 .urg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 @media (max-width:600px){.urg{grid-template-columns:1fr}}
@@ -159,7 +161,7 @@ details p{padding-bottom:16px;color:var(--muted);max-width:70ch}
 .buzon .info{display:flex;flex-direction:column;gap:12px}
 .buzon .info ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
 .trampa{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-.cuenta{font-size:13px;color:var(--muted);text-align:right}
+.cuenta{font-size:14px;color:var(--muted);text-align:right}
 .estado{border-radius:12px;padding:14px 16px}
 .estado.ok{background:var(--sea-soft)}
 .estado.mal{background:var(--bad-soft)}
@@ -175,7 +177,7 @@ details p{padding-bottom:16px;color:var(--muted);max-width:70ch}
 @media (max-width:640px){.antes{grid-template-columns:1fr}}
 .antes .card{display:flex;flex-direction:column;gap:10px}
 .antes .card p:not(.hint){font-size:18px;line-height:1.5}
-.eti{align-self:flex-start;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 10px}
+.eti{align-self:flex-start;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 10px}
 .eti.mal{background:var(--bad-soft);color:var(--bad)}
 .eti.bien{background:var(--sea-soft);color:var(--sea)}
 .relleno{display:flex;flex-direction:column;gap:12px}
@@ -189,7 +191,7 @@ details p{padding-bottom:16px;color:var(--muted);max-width:70ch}
 .fallo b{font:800 40px/1 var(--display);color:var(--bad);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 .fallo h3{font-size:17px}
 .fallo p{color:var(--muted);font-size:15px}
-.fallo a{font-size:13px;margin-top:auto;padding:10px 0 6px;display:inline-block}
+.fallo a{font-size:14px;margin-top:auto;padding:10px 0 6px;display:inline-block}
 .urg-tip{margin:8px 0 0;font-size:14px;color:var(--muted)}
 .urg-tip b{color:var(--ink)}
 .estudios{max-width:80ch;font-size:16px}
@@ -197,7 +199,7 @@ details p{padding-bottom:16px;color:var(--muted);max-width:70ch}
 .muestras{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media (max-width:700px){.muestras{grid-template-columns:1fr}}
 .muestras figure{margin:0;background:var(--bg);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
-.muestras figcaption{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.03em}
+.muestras figcaption{font-size:14px;font-weight:700;color:var(--muted);letter-spacing:.03em}
 .muestras blockquote{margin:0;font-size:16px;line-height:1.6;flex:1}
 .muestras .btn{align-self:flex-start}
 footer{border-top:1px solid var(--line);padding-block:24px 40px;color:var(--muted);font-size:14px}
@@ -227,10 +229,11 @@ details[open] p{animation:sube .3s ease}
 
 <div class="bar"><div class="wrap">
   <a class="marca" href="index.html">Asesoría Académica</a>
+  <div class="princ"><a href="index.html">Inicio</a><a href="precios.html" aria-current="page">Precios</a></div>
   <nav aria-label="Secciones">
-    <a href="#como">Cómo se calcula</a><a href="#calcula">Calcula</a><a href="#precios">Precios</a><a href="#calidad">Calidad</a><a href="#detectores">Detectores</a><a href="#pago">Pago</a><a href="#dudas">Dudas</a><a href="#escribenos">Buzón</a>
+    <a href="#como">Cómo se calcula</a><a href="#calcula">Calcula</a><a href="#precios">Lista</a><a href="#calidad">Calidad</a><a href="#detectores">Detectores</a><a href="#pago">Pago</a><a href="#dudas">Dudas</a><a href="#escribenos">Buzón</a>
   </nav>
-  <a class="cta" href="index.html#form">Pedir</a>
+  <a class="cta" href="index.html#form">Pedir cotización</a>
 </div></div>
 
 <header class="hero"><div class="wrap">
@@ -280,7 +283,7 @@ details[open] p{animation:sube .3s ease}
 
 <section id="calcula">
   <div class="cab"><span class="paso-n">2 · Pruébalo</span><h2>Calcula tu precio</h2>
-    <p class="muted">Es el precio normal. Al pedir te confirmo el valor final por correo, y nunca es más de lo que ves aquí para lo mismo.</p></div>
+    <p class="muted">Es el precio normal. Al pedir te confirmo el valor final por correo.</p></div>
   <div class="calc">
     <div class="card campos">
       <div class="f"><label for="srv">¿Qué necesitas?</label><select id="srv"></select><span class="hint" id="srvTxt"></span></div>
